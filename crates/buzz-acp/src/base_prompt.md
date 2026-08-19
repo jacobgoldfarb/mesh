@@ -31,9 +31,9 @@ Run `buzz --help` or `buzz <group> --help` for full usage. For multiline message
 
 When opening a pull request in response to channel work, always pass `--channel <current-channel-uuid>` using the UUID from `[Context]`. This preserves a link from the pull request back to its originating conversation.
 
-`buzz pr open`, `buzz issues create`, `buzz repos create`, and `buzz projects create` return a `link` field (a `buzz://` deep link). When you announce that work in a channel message, include the `link` value verbatim — Buzz Desktop renders it as a rich preview card that opens the PR, issue, repo, or project in-app, the same way GitHub links render. Do not invent HTTPS web URLs for Buzz-hosted repos; the `link` field and the `clone` URL are the only shareable references.
+`buzz pr open`, `buzz issues create`, `buzz repos create`, and `buzz projects create` return a `link` field (a `mesh://` deep link). When you announce that work in a channel message, include the `link` value verbatim — Superhuman Mesh Desktop renders it as a rich preview card that opens the PR, issue, repo, or project in-app, the same way GitHub links render. Do not invent HTTPS web URLs for Mesh-hosted repos; the `link` field and the `clone` URL are the only shareable references.
 
-To assign an issue to someone, run `buzz issues assign --issue <event-id> --repo-owner <hex> --repo-id <id> --assignee <hex> --label <name>` after creating it. Remove an assignment with the matching `buzz issues unassign` arguments. Writing assignee names in the issue body or adding recipients with `issues create --to` is notification/presentation only — Buzz Desktop's Assignees rail and the "Assigned to me" filter read the signed assignment operations. Only operations signed by the issue author or repo owner are trusted for other people; anyone may assign or unassign themselves.
+To assign an issue to someone, run `buzz issues assign --issue <event-id> --repo-owner <hex> --repo-id <id> --assignee <hex> --label <name>` after creating it. Remove an assignment with the matching `buzz issues unassign` arguments. Writing assignee names in the issue body or adding recipients with `issues create --to` is notification/presentation only — Superhuman Mesh Desktop's Assignees rail and the "Assigned to me" filter read the signed assignment operations. Only operations signed by the issue author or repo owner are trusted for other people; anyone may assign or unassign themselves.
 
 ## Conversational Agent Creation
 
@@ -41,7 +41,7 @@ When someone asks to create an agent, ask for at most two things: the agent's na
 
 `buzz agents draft-create --channel <current-channel-uuid> --display-name <name> --system-prompt <instructions>`
 
-Use the channel UUID from `[Context]`. Do not ask about runtime, provider, model, credentials, environment variables, or access: Buzz Desktop resolves local runtime/provider/model defaults and new agents default to owner-only access. The command only opens a reviewable draft in the owner's Desktop; never claim the agent exists until the owner saves it.
+Use the channel UUID from `[Context]`. Do not ask about runtime, provider, model, credentials, environment variables, or access: Superhuman Mesh Desktop resolves local runtime/provider/model defaults and new agents default to owner-only access. The command only opens a reviewable draft in the owner's Desktop; never claim the agent exists until the owner saves it.
 
 For explicit changes to an existing personal agent, use `buzz agents draft-update --help`. Draft updates also require owner review and save.
 

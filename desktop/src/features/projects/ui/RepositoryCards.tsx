@@ -59,7 +59,7 @@ function RepositoryHostIcon({ repository }: { repository: Repository }) {
   const host = projectRepoHostForRepository(repository, useRelayOrigin());
   const label =
     host.kind === "buzz"
-      ? "Buzz-hosted repository"
+      ? "Mesh-hosted repository"
       : host.kind === "external"
         ? `Git data hosted on ${host.host}`
         : "Repository host";
@@ -115,7 +115,7 @@ function RepositoryIdentity({
 }) {
   // Where the git data lives beats repeating the (often identical) project
   // name — "github.com/block/buzz" for external repos, "owner/repo" for
-  // Buzz-hosted ones.
+  // Mesh-hosted ones.
   const displayPath = repositoryDisplayPath(
     repository,
     useRelayOrigin(),

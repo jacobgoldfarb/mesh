@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Remove desktop state owned by development bundle identifiers only.
-# Production state (`xyz.block.buzz.app`, `~/.buzz`, and `buzz-desktop`) is
-# deliberately outside every deletion pattern in this script.
+# Production state (`ai.superhuman.mesh.app`, `~/.buzz`, and
+# `superhuman-mesh-desktop`) is deliberately outside every deletion
+# pattern in this script.
 set -euo pipefail
 
 log() { printf '[desktop-dev-reset] %s\n' "$*"; }
@@ -21,7 +22,7 @@ remove_bundle_state() {
 
   [[ -d "$base" ]] || return 0
   shopt -s nullglob
-  for prefix in xyz.block.buzz.app.dev xyz.block.sprout.app.dev; do
+  for prefix in ai.superhuman.mesh.app.dev xyz.block.sprout.app.dev; do
     # Match the canonical dev identifier and dot-delimited worktree variants.
     # Do not use `${prefix}*`: that could match a non-dev prefix collision.
     remove_path "$base/${prefix}${suffix}"
@@ -44,7 +45,7 @@ case "$(uname -s)" in
     # SecretStore keeps all dev identity and agent keys in this dev-only item.
     # Delete every matching item in case an older build used multiple accounts.
     if command -v security >/dev/null 2>&1; then
-      while security delete-generic-password -s buzz-desktop-dev >/dev/null 2>&1; do :; done
+      while security delete-generic-password -s superhuman-mesh-desktop-dev >/dev/null 2>&1; do :; done
       while security delete-generic-password -s sprout-desktop-dev >/dev/null 2>&1; do :; done
     fi
     ;;
@@ -66,4 +67,4 @@ remove_path "$HOME/.sprout-dev"
 mkdir -p "$HOME/.buzz-dev"
 : > "$HOME/.buzz-dev/.dev-nest-migrated"
 
-log "Development desktop state removed; production Buzz state was not touched"
+log "Development desktop state removed; production Superhuman Mesh state was not touched"

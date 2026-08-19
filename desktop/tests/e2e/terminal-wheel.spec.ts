@@ -1,13 +1,13 @@
 import { expect, test, type Page } from "@playwright/test";
 import { installMockBridge } from "../helpers/bridge";
 
-const TERM = 'section[aria-label="Buzz Term"]';
+const TERM = 'section[aria-label="Mesh Term"]';
 const NAMED = 0x0100_0000;
 const FG = NAMED | 256;
 const BG = NAMED | 257;
 
 /**
- * The shipped mock bridge throws on every `terminal_*` command, so Buzz Term is
+ * The shipped mock bridge throws on every `terminal_*` command, so Mesh Term is
  * unreachable through `installMockBridge` alone. This pre-creates
  * `__TAURI_INTERNALS__` and traps the `invoke` assignment `mockIPC` makes:
  * terminal commands are answered here, everything else falls through to the
@@ -147,7 +147,7 @@ async function reveal(page: Page) {
   await installMockBridge(page);
   await page.goto("/");
   await expect(page.getByTestId("home-inbox-list")).toBeVisible();
-  // Buzz Term needs a channel: TerminalBootstrap's context is null on Home, so
+  // Mesh Term needs a channel: TerminalBootstrap's context is null on Home, so
   // no session spawns and the chord is inert.
   await page.getByTestId("channel-general").click();
   await expect(page.getByTestId("chat-title")).toHaveText("general");
@@ -169,7 +169,7 @@ async function reveal(page: Page) {
     .toBeGreaterThanOrEqual(180);
 }
 
-test("scrollback: wheel over Buzz Term reaches terminal_scroll", async ({
+test("scrollback: wheel over Mesh Term reaches terminal_scroll", async ({
   page,
 }) => {
   await reveal(page);

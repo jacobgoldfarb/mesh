@@ -24,12 +24,12 @@ const HARNESS_DESCRIPTIONS: Record<string, string> = {
 
   // Bundled presets — sources per RESEARCH/BYOH_CATALOG_IA.md.
   // Source: https://cursor.com/docs/cli/acp
-  cursor: "Cursor's coding agent, connected to Buzz through its ACP server.",
+  cursor: "Cursor's coding agent, connected to Superhuman Mesh through its ACP server.",
   // Source: https://github.com/can1357/oh-my-pi
   omp: "A terminal coding agent with integrated development tools.",
   // Source: https://build.x.ai (docs unavailable during research; kept
   // deliberately conservative).
-  grok: "xAI's coding agent, connected to Buzz through its ACP entrypoint.",
+  grok: "xAI's coding agent, connected to Superhuman Mesh through its ACP entrypoint.",
   // Source: https://github.com/anomalyco/opencode
   opencode: "An open-source coding agent.",
   // Sources: https://github.com/MoonshotAI/kimi-cli,

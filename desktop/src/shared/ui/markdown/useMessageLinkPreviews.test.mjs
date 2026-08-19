@@ -7,7 +7,7 @@ import { mergeMessageLinkPreviews } from "./useMessageLinkPreviews.ts";
 
 const OWNER = "a".repeat(64);
 const EVENT_ID = "b".repeat(64);
-const ENTITY_HREF = `buzz://pr?id=${EVENT_ID}&owner=${OWNER}&d=buzz-world`;
+const ENTITY_HREF = `mesh://pr?id=${EVENT_ID}&owner=${OWNER}&d=buzz-world`;
 const EXTERNAL_HREF = "https://example.com/story";
 const RELAY_ORIGIN = "https://relay.example";
 
@@ -52,7 +52,7 @@ test("relay-resolved Buzz entities beat conflicting sender snapshots in content 
       {
         href: ENTITY_HREF,
         title: "Relay-authenticated PR title",
-        provider: "Buzz",
+        provider: "Mesh",
       },
       {
         href: EXTERNAL_HREF,

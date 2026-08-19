@@ -23,12 +23,36 @@ export const RELAY_UNREACHABLE_MESSAGE =
  * Accepts both `Error` instances and raw strings so callers can pass whatever
  * the Tauri IPC or WebSocket layer hands them without pre-normalizing.
  */
+function errorMessage(error: unknown): string | null {
+  if (error instanceof Error) return error.message;
+  if (typeof error === "string") return error;
+  return null;
+}
+
 export function isRelayUnreachableError(error: unknown): boolean {
-  if (error instanceof Error) {
-    return error.message.startsWith(RELAY_UNREACHABLE_PREFIX);
-  }
-  if (typeof error === "string") {
-    return error.startsWith(RELAY_UNREACHABLE_PREFIX);
-  }
-  return false;
+  const message = errorMessage(error);
+  return message !== null && message.startsWith(RELAY_UNREACHABLE_PREFIX);
+}
+
+/**
+ * True when the relay (or the local session latch) is refusing this identity
+ * as a non-member / blocked pubkey.
+ *
+ * Includes `Relay session is terminal; cannot reconnect.` — that is what
+ * `RelayClient.ensureConnected` throws after NIP-42 AUTH is permanently
+ * rejected (`restricted:` / `blocked:`). Onboarding used to treat that as a
+ * generic server error.
+ */
+export function isRelayMembershipDeniedError(error: unknown): boolean {
+  const message = errorMessage(error);
+  if (message === null) return false;
+  const normalized = message.toLowerCase();
+  return (
+    normalized.includes("you must be a relay member") ||
+    normalized.includes("relay_membership_required") ||
+    normalized.includes("restricted:") ||
+    normalized.includes("blocked:") ||
+    normalized.includes("invalid: you are not a relay member") ||
+    normalized.includes("relay session is terminal")
+  );
 }

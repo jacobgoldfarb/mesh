@@ -216,7 +216,7 @@ export function ReadmePanel({
     const unavailableContent = {
       authentication: {
         description:
-          "Buzz could not authenticate with this repository. Check your access and try again.",
+          "Superhuman Mesh could not authenticate with this repository. Check your access and try again.",
         icon: LockKeyhole,
         title: "Repository access failed",
       },
@@ -252,7 +252,7 @@ export function ReadmePanel({
       },
       unknown: {
         description:
-          "Buzz could not load this repository. Try again or contact the project owner.",
+          "Superhuman Mesh could not load this repository. Try again or contact the project owner.",
         icon: CircleAlert,
         title: "Repository unavailable",
       },
@@ -286,7 +286,7 @@ export function ReadmePanel({
           </h3>
           <p className="mt-1 max-w-lg text-sm text-muted-foreground">
             {externalHost ? (
-              "Clone this repository locally to explore its files, commits, and contributors in Buzz."
+              "Clone this repository locally to explore its files, commits, and contributors in Superhuman Mesh."
             ) : reason === "access" && accessChannelId ? (
               <AccessRestrictedDescription accessChannelId={accessChannelId} />
             ) : (

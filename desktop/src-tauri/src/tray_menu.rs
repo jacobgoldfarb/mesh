@@ -104,53 +104,87 @@ fn format_elapsed(elapsed: Duration) -> String {
     format!("{hours}h {minutes}m {seconds}s")
 }
 
-/// Builds the standalone Buzz bee as a transparent, macOS template image.
+/// Builds the Superhuman Mesh mark as a transparent, macOS template image.
 ///
 /// The app icon includes a rounded square, which is useful for the Dock but
-/// looks out of place beside the monochrome menu-bar icons. Keeping this
-/// vector-derived mask here also lets macOS tint it correctly in light and
-/// dark menu bars without a separate bitmap asset.
+/// looks out of place beside the monochrome menu-bar icons. A simplified
+/// node-and-line mesh stays readable at tray size and lets macOS tint it
+/// correctly in light and dark menu bars.
 fn tray_bee_icon() -> Image<'static> {
     const WIDTH: u32 = 64;
-    const HEIGHT: u32 = 43;
+    const HEIGHT: u32 = 64;
     const SAMPLES_PER_AXIS: u32 = 4;
-    const BEE_WIDTH: f32 = 466.0;
-    const BEE_HEIGHT: f32 = 309.0;
+    const MESH: f32 = 64.0;
+    const LINE_HALF: f32 = 1.35;
+    const NODE_R: f32 = 2.6;
+    const HUB_R: f32 = 3.2;
 
-    fn circle_contains(x: f32, y: f32, center_x: f32, center_y: f32, radius: f32) -> bool {
-        let delta_x = x - center_x;
-        let delta_y = y - center_y;
-        delta_x * delta_x + delta_y * delta_y <= radius * radius
+    // Simplified mesh in 64×64 space: ring + capital M.
+    const NODES: [(f32, f32); 17] = [
+        (32.0, 8.0),
+        (44.0, 12.0),
+        (52.0, 20.0),
+        (56.0, 32.0),
+        (52.0, 44.0),
+        (44.0, 52.0),
+        (32.0, 56.0),
+        (20.0, 52.0),
+        (12.0, 44.0),
+        (8.0, 32.0),
+        (12.0, 20.0),
+        (20.0, 12.0),
+        (20.0, 48.0),
+        (20.0, 16.0),
+        (32.0, 36.0),
+        (44.0, 16.0),
+        (44.0, 48.0),
+    ];
+    const EDGES: [(usize, usize); 16] = [
+        (0, 1),
+        (1, 2),
+        (2, 3),
+        (3, 4),
+        (4, 5),
+        (5, 6),
+        (6, 7),
+        (7, 8),
+        (8, 9),
+        (9, 10),
+        (10, 11),
+        (11, 0),
+        (12, 13),
+        (13, 14),
+        (14, 15),
+        (15, 16),
+    ];
+
+    fn dist_to_segment(px: f32, py: f32, ax: f32, ay: f32, bx: f32, by: f32) -> f32 {
+        let dx = bx - ax;
+        let dy = by - ay;
+        let len2 = dx * dx + dy * dy;
+        if len2 <= f32::EPSILON {
+            return (px - ax).hypot(py - ay);
+        }
+        let t = ((px - ax) * dx + (py - ay) * dy) / len2;
+        let t = t.clamp(0.0, 1.0);
+        (px - (ax + t * dx)).hypot(py - (ay + t * dy))
     }
 
-    fn rounded_rect_contains(
-        x: f32,
-        y: f32,
-        left: f32,
-        top: f32,
-        width: f32,
-        height: f32,
-        radius: f32,
-    ) -> bool {
-        let right = left + width;
-        let bottom = top + height;
-        let closest_x = x.clamp(left + radius, right - radius);
-        let closest_y = y.clamp(top + radius, bottom - radius);
-        let delta_x = x - closest_x;
-        let delta_y = y - closest_y;
-        delta_x * delta_x + delta_y * delta_y <= radius * radius
-    }
-
-    fn bee_contains(x: f32, y: f32) -> bool {
-        let silhouette = circle_contains(x, y, 91.7, 154.5, 91.7)
-            || circle_contains(x, y, 374.3, 154.5, 91.7)
-            || rounded_rect_contains(x, y, 128.0, 0.0, 210.0, 309.0, 34.0);
-        let cutout = circle_contains(x, y, 193.3, 84.4, 27.0)
-            || circle_contains(x, y, 276.0, 84.4, 27.0)
-            || rounded_rect_contains(x, y, 166.3, 157.2, 136.9, 38.3, 5.0)
-            || rounded_rect_contains(x, y, 166.9, 235.1, 136.2, 37.6, 5.0);
-
-        silhouette && !cutout
+    fn mesh_coverage(x: f32, y: f32) -> bool {
+        for &(i, j) in &EDGES {
+            let (ax, ay) = NODES[i];
+            let (bx, by) = NODES[j];
+            if dist_to_segment(x, y, ax, ay, bx, by) <= LINE_HALF {
+                return true;
+            }
+        }
+        for (index, &(nx, ny)) in NODES.iter().enumerate() {
+            let radius = if index >= 12 { HUB_R } else { NODE_R };
+            if (x - nx).hypot(y - ny) <= radius {
+                return true;
+            }
+        }
+        false
     }
 
     let mut rgba = vec![0; (WIDTH * HEIGHT * 4) as usize];
@@ -163,11 +197,11 @@ fn tray_bee_icon() -> Image<'static> {
                 for sample_x in 0..SAMPLES_PER_AXIS {
                     let x = (pixel_x as f32 + (sample_x as f32 + 0.5) / SAMPLES_PER_AXIS as f32)
                         / WIDTH as f32
-                        * BEE_WIDTH;
+                        * MESH;
                     let y = (pixel_y as f32 + (sample_y as f32 + 0.5) / SAMPLES_PER_AXIS as f32)
                         / HEIGHT as f32
-                        * BEE_HEIGHT;
-                    if bee_contains(x, y) {
+                        * MESH;
+                    if mesh_coverage(x, y) {
                         covered_samples += 1;
                     }
                 }
@@ -336,7 +370,7 @@ fn build_menu<R: Runtime>(
     menu.append(&MenuItem::with_id(
         app,
         OPEN_BUZZ_ID,
-        "Open Buzz",
+        "Open Superhuman Mesh",
         true,
         None::<&str>,
     )?)?;
@@ -344,7 +378,7 @@ fn build_menu<R: Runtime>(
     menu.append(&MenuItem::with_id(
         app,
         QUIT_ID,
-        "Quit Buzz",
+        "Quit Superhuman Mesh",
         true,
         None::<&str>,
     )?)?;

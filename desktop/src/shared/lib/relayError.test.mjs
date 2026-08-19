@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { isRelayUnreachableError } from "./relayError.ts";
+import {
+  isRelayMembershipDeniedError,
+  isRelayUnreachableError,
+} from "./relayError.ts";
 
 test("isRelayUnreachableError: Error with prefix returns true", () => {
   assert.equal(
@@ -52,6 +55,36 @@ test("isRelayUnreachableError: number returns false", () => {
 test("isRelayUnreachableError: plain object returns false", () => {
   assert.equal(
     isRelayUnreachableError({ message: "relay unreachable: oops" }),
+    false,
+  );
+});
+
+test("isRelayMembershipDeniedError: AUTH restricted message", () => {
+  assert.equal(
+    isRelayMembershipDeniedError(new Error("restricted: not a relay member")),
+    true,
+  );
+});
+
+test("isRelayMembershipDeniedError: terminal session latch", () => {
+  assert.equal(
+    isRelayMembershipDeniedError(
+      new Error("Relay session is terminal; cannot reconnect."),
+    ),
+    true,
+  );
+});
+
+test("isRelayMembershipDeniedError: blocked identity", () => {
+  assert.equal(
+    isRelayMembershipDeniedError("blocked: pubkey is banned"),
+    true,
+  );
+});
+
+test("isRelayMembershipDeniedError: unrelated error is false", () => {
+  assert.equal(
+    isRelayMembershipDeniedError(new Error("Timed out while loading relay event.")),
     false,
   );
 });

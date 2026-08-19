@@ -1,8 +1,9 @@
 use super::*;
 
-/// Binary names for the Buzz desktop/Tauri process. Used by dead-instance
+/// Binary names for the Superhuman Mesh desktop/Tauri process. Used by dead-instance
 /// detection to confirm the owning desktop is still alive.
 const DESKTOP_BINARY_NAMES: &[&str] = &[
+    "Superhuman Mesh",
     "Buzz",
     "buzz-desktop",
     "buzz_desktop",
@@ -11,7 +12,7 @@ const DESKTOP_BINARY_NAMES: &[&str] = &[
     "buzz-desktop.bi",
 ];
 
-/// Check if a process name matches a known Buzz desktop binary.
+/// Check if a process name matches a known Superhuman Mesh desktop binary.
 pub(super) fn is_desktop_binary(name: &str) -> bool {
     DESKTOP_BINARY_NAMES.contains(&name)
 }
@@ -105,7 +106,7 @@ fn extract_buzz_marker_value(_pid: u32) -> Option<String> {
     None
 }
 
-/// Check if a Buzz desktop process is still alive for the given instance ID.
+/// Check if a Superhuman Mesh desktop process is still alive for the given instance ID.
 /// Scans all user-owned processes named "Buzz" or "buzz-desktop" and checks
 /// whether any has the identifier in its command-line args (KERN_PROCARGS2 buffer
 /// includes both argv and environ — the `--config` JSON from `tauri dev` contains
@@ -222,11 +223,11 @@ fn desktop_is_alive_for_instance(_instance_id: &str) -> bool {
     false
 }
 
-/// Reap agent processes belonging to dead Buzz desktop instances.
+/// Reap agent processes belonging to dead Superhuman Mesh desktop instances.
 ///
 /// Scans all user processes for `BUZZ_MANAGED_AGENT=*`, groups them by
 /// instance ID, and for each foreign instance (≠ `our_instance_id`) checks
-/// whether a Buzz desktop binary is still alive for that instance. If not,
+/// whether a Superhuman Mesh desktop binary is still alive for that instance. If not,
 /// all agents from that dead instance are reaped.
 #[cfg(target_os = "macos")]
 pub(crate) fn reap_dead_instance_agents(our_instance_id: &str, skip_pids: &[u32]) {

@@ -29,7 +29,7 @@ pub fn relay_mesh_wire_model(stored: &str) -> &str {
     }
 }
 
-/// Translate the native Buzz shared compute provider into the OpenAI-compatible
+/// Translate the native Mesh shared compute provider into the OpenAI-compatible
 /// transport understood by buzz-agent. These are derived runtime details, not
 /// user-owned agent configuration.
 #[cfg(feature = "mesh-llm")]

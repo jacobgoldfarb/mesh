@@ -1,4 +1,4 @@
-/** Detect bare `buzz://channel/<uuid>` URLs in markdown text nodes. */
+/** Detect bare `mesh://channel/<uuid>` URLs in markdown text nodes. */
 import { createRemarkPrefixPlugin } from "../../../shared/lib/createRemarkPrefixPlugin.ts";
 
 const CHANNEL_URL_PATTERN = /buzz:\/\/channel\/[^\s<>"')\]]+/g;

@@ -1,4 +1,4 @@
-//! End-to-end acceptance tests for Buzz shared compute.
+//! End-to-end acceptance tests for Mesh shared compute.
 //!
 //! These tests require a membership-gated buzz-relay and a mesh-enabled desktop
 //! publishing its client-signed discovery note. Live-inference rows additionally

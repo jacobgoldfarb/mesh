@@ -201,7 +201,7 @@ test("phone recovery uses the desktop pairing card semantics", async ({
   ).toBeVisible();
   await expect(
     card.getByText(
-      "This gives this desktop permanent access to your Buzz identity. Only continue if you trust it.",
+      "This gives this desktop permanent access to your Superhuman Mesh identity. Only continue if you trust it.",
     ),
   ).toBeVisible();
   await expect(

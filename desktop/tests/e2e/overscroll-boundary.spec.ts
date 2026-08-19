@@ -65,7 +65,7 @@ test("locks viewport rubber-band outside conversation scrollers", async ({
     }),
   ).resolves.toBe(false);
 
-  // Buzz Term consumes wheel gestures as custom scrollback rather than through
+  // Mesh Term consumes wheel gestures as custom scrollback rather than through
   // a native scroll container. The viewport lock must leave that vertical
   // gesture alone so the substrate's own handler can receive it.
   await page.evaluate(() => {

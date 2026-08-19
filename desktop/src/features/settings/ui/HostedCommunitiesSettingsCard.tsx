@@ -87,7 +87,7 @@ export function HostedCommunitiesSettingsCard() {
       identityResponse.error &&
       identityResponse.error.code !== "unauthorized" &&
       // `missing_mapping` (setup_needed) just means this account hasn't linked a
-      // Buzz identity yet — that's the connect-card empty state, not an error to
+      // Superhuman Mesh identity yet — that's the connect-card empty state, not an error to
       // surface at the top of the page.
       !identityResponse.error.setup_needed
     ) {
@@ -95,7 +95,7 @@ export function HostedCommunitiesSettingsCard() {
         errorMessage(
           identityResponse.error,
           identityResponse.correlation_id,
-          "Could not load the connected Buzz identity.",
+          "Could not load the connected Superhuman Mesh identity.",
         ),
       );
     }
@@ -165,7 +165,7 @@ export function HostedCommunitiesSettingsCard() {
     });
 
   const connectIdentity = () =>
-    run("Connecting Buzz identity…", async () => {
+    run("Connecting Superhuman Mesh identity…", async () => {
       const response = await invoke<IdentityResponse>(
         "bind_builderlab_nostr_identity",
       );
@@ -174,7 +174,7 @@ export function HostedCommunitiesSettingsCard() {
           errorMessage(
             response.error,
             response.correlation_id,
-            "Could not connect the Buzz identity.",
+            "Could not connect the Superhuman Mesh identity.",
           ),
         );
       }
@@ -192,7 +192,7 @@ export function HostedCommunitiesSettingsCard() {
           errorMessage(
             response.error,
             response.correlation_id,
-            "Could not unpair the Buzz identity.",
+            "Could not unpair the Superhuman Mesh identity.",
           ),
         );
       }
@@ -230,7 +230,7 @@ export function HostedCommunitiesSettingsCard() {
           errorMessage(
             released.error,
             released.correlation_id,
-            "Could not release the previously connected Buzz identity.",
+            "Could not release the previously connected Superhuman Mesh identity.",
           ),
         );
       }
@@ -243,11 +243,11 @@ export function HostedCommunitiesSettingsCard() {
         await loadAccount();
         throw new Error(
           bound.error.code === "pubkey_already_bound"
-            ? "This device's Buzz identity is already reserved by another Builderlab account, so it can't be connected here. Sign in with that account, or transfer the identity there first."
+            ? "This device's Superhuman Mesh identity is already reserved by another Builderlab account, so it can't be connected here. Sign in with that account, or transfer the identity there first."
             : errorMessage(
                 bound.error,
                 bound.correlation_id,
-                "Could not connect this device's Buzz identity.",
+                "Could not connect this device's Superhuman Mesh identity.",
               ),
         );
       }
@@ -418,7 +418,7 @@ export function HostedCommunitiesSettingsCard() {
     <section className="space-y-6" data-testid="hosted-communities-settings">
       <SettingsSectionHeader
         title="Hosted communities"
-        description="Buzz works with any relay. This page is only for relay hosting provided by Block — sign in with a Builderlab account to create and manage Block-hosted communities. Builderlab sign-in is used on this page alone."
+        description="Superhuman Mesh works with any relay. This page is only for relay hosting provided by Block — sign in with a Builderlab account to create and manage Block-hosted communities. Builderlab sign-in is used on this page alone."
       />
 
       {error ? (
@@ -439,7 +439,7 @@ export function HostedCommunitiesSettingsCard() {
             className="mt-2 max-w-2xl text-sm text-muted-foreground/70"
             data-settings-subcopy
           >
-            Authentication opens in your browser and returns securely to Buzz.
+            Authentication opens in your browser and returns securely to Superhuman Mesh.
             You can use every other part of the app without signing in.
           </p>
           <Button
@@ -479,13 +479,13 @@ export function HostedCommunitiesSettingsCard() {
           {!identity ? (
             <div className="rounded-xl border border-amber-500/40 bg-amber-500/5 p-5">
               <h3 className="font-medium">
-                Link this account to your Buzz identity
+                Link this account to your Superhuman Mesh identity
               </h3>
               <p
                 className="mt-2 text-sm text-muted-foreground/70"
                 data-settings-subcopy
               >
-                This Builderlab account isn&apos;t linked to a Buzz identity
+                This Builderlab account isn&apos;t linked to a Superhuman Mesh identity
                 yet. Connect this device&apos;s key to create and own
                 communities under it — Buzz signs a one-time challenge locally,
                 so your private key never leaves Desktop.
@@ -498,7 +498,7 @@ export function HostedCommunitiesSettingsCard() {
                 {action ? (
                   <LoaderCircle className="h-4 w-4 animate-spin" />
                 ) : null}
-                {action ?? "Connect Buzz identity"}
+                {action ?? "Connect Superhuman Mesh identity"}
               </Button>
             </div>
           ) : identityMismatch ? (
@@ -507,7 +507,7 @@ export function HostedCommunitiesSettingsCard() {
                 <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
                 <div>
                   <h3 className="font-medium">
-                    This account is connected to a different Buzz identity
+                    This account is connected to a different Superhuman Mesh identity
                   </h3>
                   <p
                     className="mt-2 text-sm text-muted-foreground/70"
@@ -718,7 +718,7 @@ function UnpairIdentityButton({
       </Button>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Unpair this Buzz identity?</AlertDialogTitle>
+          <AlertDialogTitle>Unpair this Superhuman Mesh identity?</AlertDialogTitle>
           <AlertDialogDescription>
             Your Builderlab account will no longer be connected to this Buzz
             key. You can reconnect any key later, but community actions stay
@@ -916,7 +916,7 @@ function TransferOwnershipDialog({
           <DialogTitle>Transfer ownership</DialogTitle>
           <DialogDescription>
             Transfer {communityName} to another person. You become a regular
-            member. The recipient needs a connected Buzz identity first, and
+            member. The recipient needs a connected Superhuman Mesh identity first, and
             this can&apos;t be undone.
           </DialogDescription>
         </DialogHeader>

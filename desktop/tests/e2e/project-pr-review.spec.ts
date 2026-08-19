@@ -1024,7 +1024,7 @@ test("repository rows identify their git host", async ({ page }) => {
     .getByTestId("repository-host-icon");
   await expect(buzzHostIcon).toHaveAttribute(
     "aria-label",
-    "Buzz-hosted repository",
+    "Mesh-hosted repository",
   );
   await expect(
     page
@@ -1034,7 +1034,7 @@ test("repository rows identify their git host", async ({ page }) => {
 
   await buzzHostIcon.hover();
   await expect(
-    page.getByRole("tooltip", { name: "Buzz-hosted repository" }),
+    page.getByRole("tooltip", { name: "Mesh-hosted repository" }),
   ).toBeVisible();
 });
 

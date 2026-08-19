@@ -366,7 +366,7 @@ impl Llm {
     }
 
     /// OpenAI dispatch. The configured model is sent as given: callers that
-    /// route through a mesh (Buzz shared compute) resolve their own model name
+    /// route through a mesh (Mesh shared compute) resolve their own model name
     /// before spawning the agent, so nothing here needs to know about meshes.
     async fn openai_request<F>(
         &self,

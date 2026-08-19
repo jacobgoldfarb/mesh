@@ -164,7 +164,7 @@ function BeeLoader({
 
 // Cold boot gate: the theme-adaptive grainient background with a single
 // centered Buzz bee flying over it — the same static mark as before, now with
-// its wings flapping (ported from the Buzz website's wing-flap). Replaces the
+// its wings flapping (ported from the Superhuman Mesh website's wing-flap). Replaces the
 // old "Setting up your community" text, which stays as an sr-only caption.
 function AppLoadingGate() {
   return (

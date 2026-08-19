@@ -68,7 +68,7 @@ fn load_mesh_sharing_config(app: &AppHandle) -> Result<Option<MeshSharingConfig>
 }
 
 const RELAY_MESH_RUNTIME_NO_TARGET: &str =
-    "Buzz shared compute requires a live serving member; start serving the selected model on a member, then try again";
+    "Mesh shared compute requires a live serving member; start serving the selected model on a member, then try again";
 
 /// Whether the Share-compute "stop sharing" path (`mesh_stop_node`) should tear
 /// down the runtime currently occupying the single slot.
@@ -709,13 +709,13 @@ pub(crate) async fn ensure_relay_mesh_for_record(
             mesh_llm::MeshRuntimeRecovery::Evicted | mesh_llm::MeshRuntimeRecovery::Absent => {}
             mesh_llm::MeshRuntimeRecovery::Debouncing => {
                 return Err(
-                    "Buzz shared compute ingress is temporarily unresponsive; recovery is already scheduled. Try again shortly."
+                    "Mesh shared compute ingress is temporarily unresponsive; recovery is already scheduled. Try again shortly."
                         .to_string(),
                 );
             }
             mesh_llm::MeshRuntimeRecovery::ReleasePending => {
                 return Err(
-                    "Buzz shared compute is still shutting down its previous local ingress. Try again shortly."
+                    "Mesh shared compute is still shutting down its previous local ingress. Try again shortly."
                         .to_string(),
                 );
             }
@@ -725,7 +725,7 @@ pub(crate) async fn ensure_relay_mesh_for_record(
             mesh_llm::MeshRuntimeRecovery::RestartRequired => {
                 app.request_restart();
                 return Err(
-                    "Buzz shared compute startup lost its local ingress before shutdown control became available. Buzz is restarting to recover it."
+                    "Mesh shared compute startup lost its local ingress before shutdown control became available. Buzz is restarting to recover it."
                         .to_string(),
                 );
             }
@@ -747,13 +747,13 @@ pub(crate) async fn ensure_relay_mesh_for_record(
         Ok(Some(target)) => target,
         Ok(None) => {
             return Err(
-                "Buzz shared compute cannot start because no live member is serving this model. Start serving it on a member, then try again."
+                "Mesh shared compute cannot start because no live member is serving this model. Start serving it on a member, then try again."
                     .to_string(),
             );
         }
         Err(error) => {
             return Err(format!(
-                "could not refresh Buzz shared compute serving members: {error}"
+                "could not refresh Mesh shared compute serving members: {error}"
             ));
         }
     };

@@ -1,13 +1,13 @@
 /**
- * Remark plugin that detects bare `buzz://message?…` URLs in text nodes and
+ * Remark plugin that detects bare `mesh://message?…` URLs in text nodes and
  * replaces each with a custom `message-link` HAST element. Legacy
- * `buzz://message?…` URLs are accepted during the rename. The `markdown.tsx`
+ * `mesh://message?…` URLs are accepted during the rename. The `markdown.tsx`
  * components map renders that as an inline pill (channel name + click-to-open)
  * instead of the raw 100-char URL.
  *
  * Why this plugin exists: `remark-gfm`'s autolinker only covers `http(s)://`
- * and `www.`. Custom schemes like `buzz://` only reach the `<a>` component
- * override when the user wrote an explicit `[label](buzz://…)` link.
+ * and `www.`. Custom schemes like `mesh://` only reach the `<a>` component
+ * override when the user wrote an explicit `[label](mesh://…)` link.
  *
  * Mirrors `remarkChannelLinks` / `remarkMentions` — same factory, same HAST
  * shape — so the rendering layer treats all three uniformly. Trailing

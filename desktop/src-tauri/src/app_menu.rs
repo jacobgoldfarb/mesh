@@ -11,7 +11,7 @@
 //!    into hide-to-tray, so Cmd+W never closed a window -- it hid the whole
 //!    app. That is already redundant with Cmd+H (Hide), which stays.
 //! 2. macOS resolves a menu key equivalent before the webview receives any key
-//!    event, so Buzz Term could never bind Cmd+W to "close this terminal tab"
+//!    event, so Mesh Term could never bind Cmd+W to "close this terminal tab"
 //!    while the accelerator was claimed here.
 //!
 //! So this module builds the standard menu minus both `close_window` items.

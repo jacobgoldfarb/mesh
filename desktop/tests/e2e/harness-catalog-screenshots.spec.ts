@@ -13,7 +13,7 @@ const SHOTS = "test-results/byoh-after";
 const CATALOG = [
   {
     id: "buzz-agent",
-    label: "Buzz Agent",
+    label: "Mesh Agent",
     avatar_url: "",
     availability: "available",
     command: "buzz-agent",

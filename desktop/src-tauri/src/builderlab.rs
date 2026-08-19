@@ -25,7 +25,7 @@ const AUTH_COMPLETE_HTML: &str = r#"<!doctype html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Buzz authentication complete</title>
+  <title>Superhuman Mesh authentication complete</title>
   <style>
     :root {
       color-scheme: light;
@@ -117,24 +117,23 @@ const AUTH_COMPLETE_HTML: &str = r#"<!doctype html>
 </head>
 <body>
   <main>
-    <svg class="bee" viewBox="0 0 466 309" role="img" aria-label="Buzz">
-      <defs>
-        <mask id="bee-mask">
-          <rect width="466" height="309" fill="black"/>
-          <circle cx="91.7" cy="154.5" r="91.7" fill="white"/>
-          <circle cx="374.3" cy="154.5" r="91.7" fill="white"/>
-          <rect x="128" width="210" height="309" rx="34" fill="white"/>
-          <ellipse cx="193.3" cy="84.4" rx="27" ry="27" fill="black"/>
-          <ellipse cx="276" cy="84.4" rx="27" ry="27" fill="black"/>
-          <rect x="166.3" y="157.2" width="136.9" height="38.3" rx="5" fill="black"/>
-          <rect x="166.9" y="235.1" width="136.2" height="37.6" rx="5" fill="black"/>
-        </mask>
-      </defs>
-      <rect width="466" height="309" fill="currentColor" mask="url(#bee-mask)"/>
+    <svg class="bee" viewBox="0 0 64 64" role="img" aria-label="Superhuman Mesh">
+      <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2.2">
+        <circle cx="32" cy="32" r="24"/>
+        <path d="M20 48 V16 L32 36 L44 16 V48"/>
+      </g>
+      <g fill="currentColor">
+        <circle cx="32" cy="8" r="2.4"/>
+        <circle cx="20" cy="16" r="2.4"/>
+        <circle cx="32" cy="36" r="2.4"/>
+        <circle cx="44" cy="16" r="2.4"/>
+        <circle cx="20" cy="48" r="2.4"/>
+        <circle cx="44" cy="48" r="2.4"/>
+      </g>
     </svg>
     <div class="eyebrow">Authentication complete</div>
     <h1>You&rsquo;re signed in.</h1>
-    <p>You can close this window and return to Buzz.</p>
+    <p>You can close this window and return to Superhuman Mesh.</p>
   </main>
 </body>
 </html>"#;
@@ -645,14 +644,14 @@ mod tests {
     use super::*;
 
     #[test]
-    fn auth_complete_page_uses_buzz_brand() {
+    fn auth_complete_page_uses_mesh_brand() {
         for expected in [
-            "<title>Buzz authentication complete</title>",
+            "<title>Superhuman Mesh authentication complete</title>",
             "#d7d72e",
             "#231e1e",
             "#d7e7f6",
-            "aria-label=\"Buzz\"",
-            "return to Buzz",
+            "aria-label=\"Superhuman Mesh\"",
+            "return to Superhuman Mesh",
         ] {
             assert!(
                 AUTH_COMPLETE_HTML.contains(expected),

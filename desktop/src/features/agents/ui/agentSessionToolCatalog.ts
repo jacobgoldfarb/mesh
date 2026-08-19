@@ -148,8 +148,8 @@ export function getBuzzToolInfo(title: string): BuzzToolInfo | null {
     return {
       icon: Workflow,
       label: isRead
-        ? "Reads workflow state from Buzz."
-        : "Updates workflow state in Buzz.",
+        ? "Reads workflow state from Superhuman Mesh."
+        : "Updates workflow state in Superhuman Mesh.",
       tone: isWrite ? "write" : "read",
     };
   }
@@ -174,8 +174,8 @@ export function getBuzzToolInfo(title: string): BuzzToolInfo | null {
     return {
       icon: Users,
       label: isRead
-        ? "Reads Buzz identity or presence data."
-        : "Updates Buzz identity or membership data.",
+        ? "Reads Superhuman Mesh identity or presence data."
+        : "Updates Superhuman Mesh identity or membership data.",
       tone: isWrite ? "write" : "admin",
     };
   }
@@ -200,7 +200,7 @@ export function getBuzzToolInfo(title: string): BuzzToolInfo | null {
 
   return {
     icon: MessageSquare,
-    label: isRead ? "Reads from Buzz." : "Writes to Buzz.",
+    label: isRead ? "Reads from Superhuman Mesh." : "Writes to Superhuman Mesh.",
     tone: isWrite ? "write" : "read",
   };
 }

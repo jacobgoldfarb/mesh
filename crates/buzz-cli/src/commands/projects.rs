@@ -29,7 +29,7 @@ use crate::error::CliError;
 
 // ── Buzz repo-ID grammar (bare --repo shorthand) ─────────────────────────────
 
-/// Pattern for a Buzz-hosted repo identifier (bare `--repo` shorthand).
+/// Pattern for a Mesh-hosted repo identifier (bare `--repo` shorthand).
 /// `[a-zA-Z0-9._-]{1,64}` — no colons, so guaranteed collision-free with
 /// `30617:<owner>:<d>` full coordinates.
 fn is_bare_repo_id(s: &str) -> bool {
@@ -113,8 +113,8 @@ fn make_tag(parts: &[&str]) -> Result<Tag, CliError> {
 /// Submit a project event and print the relay's write response.
 ///
 /// `link_slug` carries the project's d-tag on creates whose slug fits the
-/// `buzz://` link charset; the response then also carries a `link` field,
-/// which renders as a rich preview card in Buzz Desktop when included in a
+/// `mesh://` link charset; the response then also carries a `link` field,
+/// which renders as a rich preview card in Superhuman Mesh Desktop when included in a
 /// chat message — agents announce projects with it (see base_prompt.md).
 async fn submit_project(
     client: &BuzzClient,

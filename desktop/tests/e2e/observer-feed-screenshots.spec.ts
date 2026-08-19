@@ -149,7 +149,7 @@ test.describe("observer feed screenshots", () => {
             prompt: [
               {
                 type: "text",
-                text: "[Buzz event: Kind 9]\nContent: @Observer Agent help me debug this",
+                text: "[Mesh event: Kind 9]\nContent: @Observer Agent help me debug this",
               },
               {
                 type: "text",
@@ -362,7 +362,7 @@ test.describe("observer feed screenshots", () => {
             prompt: [
               {
                 type: "text",
-                text: "[Buzz event: Kind 9]\nContent: @Observer Agent help me debug this",
+                text: "[Mesh event: Kind 9]\nContent: @Observer Agent help me debug this",
               },
               {
                 type: "text",
@@ -672,7 +672,7 @@ test.describe("observer feed screenshots", () => {
     // Verifies the consolidated presentation: session/new.systemPrompt always
     // renders as a standalone top-level "System prompt" card (never injected into
     // the CheckCheck bundle). The CheckCheck dialog contains only per-turn context
-    // (Buzz event / Thread context) — no Base/System/Team Instructions/Core Memory/Channel Canvas sections.
+    // (Mesh event / Thread context) — no Base/System/Team Instructions/Core Memory/Channel Canvas sections.
     await seedObserverEvents(page, OBSERVER_AGENT_PUBKEY, [
       {
         seq: 1,
@@ -728,7 +728,7 @@ test.describe("observer feed screenshots", () => {
             prompt: [
               {
                 type: "text",
-                text: "[Buzz event: Kind 9]\nContent: @Observer Agent help me debug this",
+                text: "[Mesh event: Kind 9]\nContent: @Observer Agent help me debug this",
               },
               {
                 type: "text",
@@ -777,12 +777,12 @@ test.describe("observer feed screenshots", () => {
       timeout: 5_000,
     });
 
-    // Per-turn prompt context (Buzz event / Thread context) does NOT appear
+    // Per-turn prompt context (Mesh event / Thread context) does NOT appear
     // as a standalone feed row — it lives behind the CheckCheck toggle.
     await expect(feedPanel.getByText("Prompt context")).toHaveCount(0);
 
     // Open the CheckCheck dialog: it contains ONLY per-turn context sections
-    // (Buzz event, Thread context). Base/System/Team Instructions/Core Memory/Channel Canvas must NOT appear.
+    // (Mesh event, Thread context). Base/System/Team Instructions/Core Memory/Channel Canvas must NOT appear.
     await feedPanel.getByTestId("transcript-prompt-context-toggle").click();
     const dialog = page.getByRole("dialog");
     await expect(dialog).toBeVisible({ timeout: 5_000 });
@@ -790,9 +790,9 @@ test.describe("observer feed screenshots", () => {
       .getByTestId("transcript-prompt-context-sections")
       .locator("article");
     const sectionTitles = await sectionArticles.allInnerTexts();
-    // Only per-turn context sections (Buzz event + Thread context) — no system-prompt sections.
+    // Only per-turn context sections (Mesh event + Thread context) — no system-prompt sections.
     expect(sectionTitles.length).toBe(2);
-    expect(sectionTitles[0]).toContain("Buzz event");
+    expect(sectionTitles[0]).toContain("Mesh event");
     expect(sectionTitles[1]).toContain("Thread context");
     // Collect all article heading text and assert none of the five
     // system-prompt section labels appear — including exact "System" which

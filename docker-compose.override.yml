@@ -1,0 +1,9 @@
+# Local-only port remap. Auto-loaded by Docker Compose; do not commit.
+# Host 5432/6379 are already bound by gptzero-dev-cluster-control-plane.
+services:
+  postgres:
+    ports: !override
+      - "127.0.0.1:5434:5432"
+  redis:
+    ports: !override
+      - "127.0.0.1:6380:6379"

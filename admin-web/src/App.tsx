@@ -94,7 +94,7 @@ function Reports() {
     <Page
       eyebrow="Moderation"
       title="Open reports"
-      description="Review reports across every Buzz community."
+      description="Review reports across every Superhuman Mesh community."
     >
       <StateView resource={resource}>
         {(reports) =>
@@ -237,7 +237,7 @@ function FeedbackList() {
     <Page
       eyebrow="Product"
       title="Feedback"
-      description="Recent product feedback from across Buzz."
+      description="Recent product feedback from across Superhuman Mesh."
     >
       <StateView resource={resource}>
         {(items) => {
@@ -694,13 +694,24 @@ function date(value: string) {
 
 function BuzzMark() {
   return (
-    <svg viewBox="0 0 466 309" aria-hidden="true">
-      <path d="M91.7 62.8a91.7 91.7 0 0 0 0 183.4H128V62.8H91.7Zm282.6 0H338v183.4h36.3a91.7 91.7 0 1 0 0-183.4Z" />
-      <path
-        fillRule="evenodd"
-        d="M162 0h142a34 34 0 0 1 34 34v241a34 34 0 0 1-34 34H162a34 34 0 0 1-34-34V34a34 34 0 0 1 34-34Zm31.3 57.4a27 27 0 1 0 0 54 27 27 0 0 0 0-54Zm82.7 0a27 27 0 1 0 0 54 27 27 0 0 0 0-54Zm-109.7 99.8h136.9v38.3H166.3v-38.3Zm.6 77.9h136.2v37.6H166.9v-37.6Z"
-        clipRule="evenodd"
-      />
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <g
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeWidth="2.2"
+      >
+        <circle cx="32" cy="32" r="24" />
+        <path d="M20 48 V16 L32 36 L44 16 V48" />
+      </g>
+      <g fill="currentColor">
+        <circle cx="32" cy="8" r="2.4" />
+        <circle cx="20" cy="16" r="2.4" />
+        <circle cx="32" cy="36" r="2.4" />
+        <circle cx="44" cy="16" r="2.4" />
+        <circle cx="20" cy="48" r="2.4" />
+        <circle cx="44" cy="48" r="2.4" />
+      </g>
     </svg>
   );
 }
@@ -818,7 +829,7 @@ export function App() {
             <BuzzMark />
           </span>
           <span>
-            Buzz <b>Admin</b>
+            Superhuman Mesh <b>Admin</b>
           </span>
         </Link>
         <nav>

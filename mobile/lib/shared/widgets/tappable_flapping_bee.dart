@@ -6,10 +6,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'flapping_bee.dart';
 
-/// The Buzz mark with wings that flutter twice when the user taps it.
+/// The Superhuman Mesh mark. Tap still runs a short pulse for fun.
 ///
-/// The geometry and wing tuck match the desktop loading bee. When reduced
-/// motion is enabled, the mark stays static.
+/// When reduced motion is enabled, the mark stays static.
 class TappableFlappingBee extends HookConsumerWidget {
   /// The rendered width of the complete bee mark.
   final double width;
@@ -37,8 +36,8 @@ class TappableFlappingBee extends HookConsumerWidget {
 
     return Semantics(
       button: true,
-      label: 'Buzz bee',
-      hint: 'Tap to make its wings flutter',
+      label: 'Superhuman Mesh logo',
+      hint: 'Tap to pulse the mark',
       onTap: flutterWings,
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,

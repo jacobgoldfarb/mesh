@@ -43,8 +43,8 @@ test("pending external metadata reserves the image treatment", () => {
 test("pending Buzz entity metadata remains image-less", () => {
   const entityPreview = {
     kind: "buzz-repository",
-    href: `buzz://repo?owner=${"cd".repeat(32)}&d=buzz`,
-    provider: "Buzz",
+    href: `mesh://repo?owner=${"cd".repeat(32)}&d=buzz`,
+    provider: "Mesh",
     title: "buzz",
     typeLabel: "repo",
   };
@@ -204,8 +204,8 @@ test("metadata loader coalesces fragment variants and bounds concurrency", async
 test("withEntityFallbacks re-adds previews dropped by null metadata", () => {
   const entityPreview = {
     kind: "buzz-pull-request",
-    href: `buzz://pr?id=${"ab".repeat(32)}&owner=${"cd".repeat(32)}&d=buzz`,
-    provider: "Buzz",
+    href: `mesh://pr?id=${"ab".repeat(32)}&owner=${"cd".repeat(32)}&d=buzz`,
+    provider: "Mesh",
     title: `buzz #${"ab".repeat(4)}`,
     typeLabel: "PR",
   };
@@ -218,15 +218,15 @@ test("withEntityFallbacks re-adds previews dropped by null metadata", () => {
 test("withEntityFallbacks keeps resolved previews and preserves order", () => {
   const first = {
     kind: "buzz-repository",
-    href: `buzz://repo?owner=${"cd".repeat(32)}&d=buzz`,
-    provider: "Buzz",
+    href: `mesh://repo?owner=${"cd".repeat(32)}&d=buzz`,
+    provider: "Mesh",
     title: "buzz",
     typeLabel: "repo",
   };
   const second = {
     kind: "buzz-issue",
-    href: `buzz://issue?id=${"ef".repeat(32)}&owner=${"cd".repeat(32)}&d=buzz`,
-    provider: "Buzz",
+    href: `mesh://issue?id=${"ef".repeat(32)}&owner=${"cd".repeat(32)}&d=buzz`,
+    provider: "Mesh",
     title: `buzz #${"ef".repeat(4)}`,
     typeLabel: "issue",
   };
@@ -247,12 +247,12 @@ test("entity fallback eligibility is kind-scoped", () => {
     isBuzzEntityPreview({
       ...preview,
       kind: "buzz-repository",
-      href: `buzz://repo?owner=${"cd".repeat(32)}&d=buzz`,
+      href: `mesh://repo?owner=${"cd".repeat(32)}&d=buzz`,
     }),
     true,
   );
   assert.equal(
-    isBuzzEntityPreview({ ...preview, href: "buzz://future?id=example" }),
+    isBuzzEntityPreview({ ...preview, href: "mesh://future?id=example" }),
     false,
   );
 });
@@ -260,7 +260,7 @@ test("entity fallback eligibility is kind-scoped", () => {
 test("withEntityFallbacks still drops unresolved external links", () => {
   assert.deepEqual(withEntityFallbacks([preview], []), []);
   assert.deepEqual(
-    withEntityFallbacks([{ ...preview, href: "buzz://future?id=example" }], []),
+    withEntityFallbacks([{ ...preview, href: "mesh://future?id=example" }], []),
     [],
   );
 });
@@ -289,7 +289,7 @@ test("Buzz PR metadata includes repository identity and trusted root context", a
       pubkey: owner,
       tags: [
         ["d", "buzz"],
-        ["name", "Buzz Desktop"],
+        ["name", "Superhuman Mesh Desktop"],
         ["default-branch", "main"],
       ],
     }),
@@ -354,10 +354,10 @@ test("Buzz PR metadata includes repository identity and trusted root context", a
       .slice(0, filter.limit);
 
   const result = await fetchBuzzEntityMetadata(
-    `buzz://pr?id=${id}&owner=${owner}&d=buzz`,
+    `mesh://pr?id=${id}&owner=${owner}&d=buzz`,
     fetchEvents,
   );
-  assert.equal(result?.siteName, "Buzz Desktop");
+  assert.equal(result?.siteName, "Superhuman Mesh Desktop");
   assert.equal(result?.title, "Restore entity cards");
   assert.equal(result?.description, "Open · fix/cards → release · 1234567");
   assert.equal(result?.faviconDataUrl, null);
@@ -375,7 +375,7 @@ test("Buzz entity roots reject ambiguous repository tags", async () => {
     pubkey: owner,
     tags: [
       ["d", "buzz"],
-      ["name", "Buzz Desktop"],
+      ["name", "Superhuman Mesh Desktop"],
       ["default-branch", "main"],
     ],
   });
@@ -396,7 +396,7 @@ test("Buzz entity roots reject ambiguous repository tags", async () => {
       ],
     });
     const result = await fetchBuzzEntityMetadata(
-      `buzz://${type}?id=${id}&owner=${owner}&d=buzz`,
+      `mesh://${type}?id=${id}&owner=${owner}&d=buzz`,
       async (filter) =>
         filter.kinds?.includes(30617)
           ? [repository]
@@ -411,7 +411,7 @@ test("Buzz entity roots reject ambiguous repository tags", async () => {
 test("Buzz repository metadata stays image-less and exposes default branch", async () => {
   const owner = "cd".repeat(32);
   const result = await fetchBuzzEntityMetadata(
-    `buzz://repo?owner=${owner}&d=relay-tools`,
+    `mesh://repo?owner=${owner}&d=relay-tools`,
     async () => [
       relayEvent({
         id: "01".repeat(32),
@@ -439,7 +439,7 @@ test("Buzz repository metadata stays image-less and exposes default branch", asy
 test("Buzz project metadata resolves from the 30621 announcement", async () => {
   const owner = "cd".repeat(32);
   const result = await fetchBuzzEntityMetadata(
-    `buzz://project?owner=${owner}&d=pollinator`,
+    `mesh://project?owner=${owner}&d=pollinator`,
     async () => [
       relayEvent({
         id: "01".repeat(32),
@@ -465,7 +465,7 @@ test("Buzz project metadata declines a missing or invalid announcement", async (
   const owner = "cd".repeat(32);
   assert.equal(
     await fetchBuzzEntityMetadata(
-      `buzz://project?owner=${owner}&d=pollinator`,
+      `mesh://project?owner=${owner}&d=pollinator`,
       async () => [],
     ),
     null,
@@ -473,7 +473,7 @@ test("Buzz project metadata declines a missing or invalid announcement", async (
   // Two `d` tags fail NIP-MP envelope validation.
   assert.equal(
     await fetchBuzzEntityMetadata(
-      `buzz://project?owner=${owner}&d=pollinator`,
+      `mesh://project?owner=${owner}&d=pollinator`,
       async () => [
         relayEvent({
           id: "01".repeat(32),

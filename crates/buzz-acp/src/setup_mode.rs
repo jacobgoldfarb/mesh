@@ -690,7 +690,7 @@ mod tests {
     #[test]
     fn setup_payload_deserializes_git_bash_requirement() {
         let payload: SetupPayload = serde_json::from_str(
-            r#"{"agent_name":"Buzz Agent","agent_pubkey":"test","requirements":[{"surface":"git_bash"}]}"#,
+            r#"{"agent_name":"Mesh Agent","agent_pubkey":"test","requirements":[{"surface":"git_bash"}]}"#,
         )
         .unwrap();
         assert!(matches!(
@@ -783,7 +783,7 @@ mod tests {
     #[test]
     fn nudge_body_git_bash_copy_points_to_agent_runtimes() {
         let payload = SetupPayload {
-            agent_name: "Buzz Agent".to_string(),
+            agent_name: "Mesh Agent".to_string(),
             agent_pubkey: "test".to_string(),
             requirements: vec![RequirementPayload::GitBash],
         };

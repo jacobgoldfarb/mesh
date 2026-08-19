@@ -6,7 +6,7 @@
 //!
 //!   1. SERVE process: hosts a GGUF with `trust_policy(Allowlist)` +
 //!      `owner_required(true)`, trusting exactly one other owner id — the
-//!      same builder calls Buzz desktop makes with a resolved member roster.
+//!      same builder calls Superhuman Mesh desktop makes with a resolved member roster.
 //!   2. TRUSTED process: client presenting the allowlisted owner key, joins
 //!      via the invite token, must see the routed model; the orchestrator
 //!      then drives a real inference through it.

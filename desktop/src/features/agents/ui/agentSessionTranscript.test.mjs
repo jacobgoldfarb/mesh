@@ -80,7 +80,7 @@ test("buildTranscript renders Prompt context + user message for a multi-block se
           { type: "text", text: "[Context]\nScope: thread" },
           {
             type: "text",
-            text: `[Buzz event: @mention]\nEvent ID: ${PROMPT_EVENT_ID.toUpperCase()}\nFrom: x (hex: ${"a".repeat(64)})\nContent: hello`,
+            text: `[Mesh event: @mention]\nEvent ID: ${PROMPT_EVENT_ID.toUpperCase()}\nFrom: x (hex: ${"a".repeat(64)})\nContent: hello`,
           },
         ],
       },
@@ -96,7 +96,7 @@ test("buildTranscript renders Prompt context + user message for a multi-block se
   const promptContext = items.find((i) => i.title === "Prompt context");
   assert.deepEqual(
     promptContext.sections.map((s) => s.title),
-    ["Agent Memory — core", "Context", "Buzz event: @mention"],
+    ["Agent Memory — core", "Context", "Mesh event: @mention"],
     "every section header is counted",
   );
   const userMessage = items.find((i) => i.type === "message");
@@ -114,7 +114,7 @@ test("buildTranscript falls back to a single turn trigger id for older prompt fr
         prompt: [
           {
             type: "text",
-            text: `[Buzz event: @mention]\nFrom: x (hex: ${"a".repeat(64)})\nContent: hello`,
+            text: `[Mesh event: @mention]\nFrom: x (hex: ${"a".repeat(64)})\nContent: hello`,
           },
         ],
       },
@@ -1087,7 +1087,7 @@ test("observer feed renders system-prompt before prompt-context in display order
           prompt: [
             {
               type: "text",
-              text: `[Buzz event: @mention]\nEvent ID: ${"a".repeat(64)}\nFrom: x (hex: ${"b".repeat(64)})\nContent: hello`,
+              text: `[Mesh event: @mention]\nEvent ID: ${"a".repeat(64)}\nFrom: x (hex: ${"b".repeat(64)})\nContent: hello`,
             },
             { type: "text", text: "[Thread context]\nPrior messages here." },
           ],
@@ -1183,7 +1183,7 @@ test("observer feed renders system-prompt before prompt-context in display order
           prompt: [
             {
               type: "text",
-              text: `[Buzz event: @mention]\nEvent ID: ${"a".repeat(64)}\nFrom: x (hex: ${"b".repeat(64)})\nContent: turn 1`,
+              text: `[Mesh event: @mention]\nEvent ID: ${"a".repeat(64)}\nFrom: x (hex: ${"b".repeat(64)})\nContent: turn 1`,
             },
             { type: "text", text: "[Thread context]\nEmpty." },
           ],
@@ -1217,7 +1217,7 @@ test("observer feed renders system-prompt before prompt-context in display order
           prompt: [
             {
               type: "text",
-              text: `[Buzz event: @mention]\nEvent ID: ${"c".repeat(64)}\nFrom: x (hex: ${"d".repeat(64)})\nContent: turn 2`,
+              text: `[Mesh event: @mention]\nEvent ID: ${"c".repeat(64)}\nFrom: x (hex: ${"d".repeat(64)})\nContent: turn 2`,
             },
             { type: "text", text: "[Thread context]\nOne prior message." },
           ],
@@ -1279,7 +1279,7 @@ test("steer ingress bundles its prompt context into the steer prompt segment, no
           prompt: [
             {
               type: "text",
-              text: `[Buzz event: @mention]\nEvent ID: ${"e".repeat(64)}\nFrom: x (hex: ${"f".repeat(64)})\nContent: steer me`,
+              text: `[Mesh event: @mention]\nEvent ID: ${"e".repeat(64)}\nFrom: x (hex: ${"f".repeat(64)})\nContent: steer me`,
             },
             { type: "text", text: "[Thread context]\nPrior messages here." },
           ],
@@ -1364,7 +1364,7 @@ test("buildTranscript correctly renders prompt segment when session/prompt arriv
       prompt: [
         {
           type: "text",
-          text: `[Buzz event: @mention]\nEvent ID: ${EVENT_HEX.toUpperCase()}\nFrom: Alice (hex: ${AUTHOR_HEX})\nContent: please help`,
+          text: `[Mesh event: @mention]\nEvent ID: ${EVENT_HEX.toUpperCase()}\nFrom: Alice (hex: ${AUTHOR_HEX})\nContent: please help`,
         },
         { type: "text", text: "[Context]\nScope: thread" },
       ],
@@ -1546,7 +1546,7 @@ test("buildTranscript restart sequence: both sessions retain their own system-pr
           prompt: [
             {
               type: "text",
-              text: `[Buzz event: @mention]\nEvent ID: ${USER_EVENT_HEX.toUpperCase()}\nFrom: Will (hex: ${AUTHOR_HEX})\nContent: @Paul status check? I had to restart`,
+              text: `[Mesh event: @mention]\nEvent ID: ${USER_EVENT_HEX.toUpperCase()}\nFrom: Will (hex: ${AUTHOR_HEX})\nContent: @Paul status check? I had to restart`,
             },
           ],
         },
@@ -1719,7 +1719,7 @@ test("buildTranscript five-section system prompt card is standalone with all sec
   //   (b) The standalone item must carry all five sections in order:
   //       Base → System → Team Instructions → Core Memory → Channel Canvas.
   //   (c) The prompt segment's context (CheckCheck dialog) must contain only
-  //       the session/prompt:context sections (Buzz event + Thread context),
+  //       the session/prompt:context sections (Mesh event + Thread context),
   //       never the system-prompt sections.
   const CH = "44444444-4444-4444-4444-444444444444";
   const events = [
@@ -1795,7 +1795,7 @@ test("buildTranscript five-section system prompt card is standalone with all sec
           prompt: [
             {
               type: "text",
-              text: `[Buzz event: @mention]\nEvent ID: ${"a".repeat(64)}\nFrom: x (hex: ${"b".repeat(64)})\nContent: hello`,
+              text: `[Mesh event: @mention]\nEvent ID: ${"a".repeat(64)}\nFrom: x (hex: ${"b".repeat(64)})\nContent: hello`,
             },
             {
               type: "text",
@@ -1862,10 +1862,10 @@ test("buildTranscript five-section system prompt card is standalone with all sec
   const contextSectionTitles = (promptContextItem.sections ?? []).map(
     (s) => s.title,
   );
-  // Must have Buzz event and Thread context sections, NOT Base/System/Team Instructions/Core Memory/Channel Canvas.
+  // Must have Mesh event and Thread context sections, NOT Base/System/Team Instructions/Core Memory/Channel Canvas.
   assert.ok(
     contextSectionTitles.some((t) => t.toLowerCase().includes("buzz")),
-    "prompt context must contain a Buzz event section",
+    "prompt context must contain a Mesh event section",
   );
   assert.ok(
     !contextSectionTitles.some(
@@ -1956,7 +1956,7 @@ test("buildTranscript session/new via _meta.systemPrompt.append produces identic
           prompt: [
             {
               type: "text",
-              text: `[Buzz event: @mention]\nEvent ID: ${"a".repeat(64)}\nFrom: x (hex: ${"b".repeat(64)})\nContent: hello`,
+              text: `[Mesh event: @mention]\nEvent ID: ${"a".repeat(64)}\nFrom: x (hex: ${"b".repeat(64)})\nContent: hello`,
             },
             { type: "text", text: "[Thread context]\nPrior messages here." },
           ],

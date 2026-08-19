@@ -303,7 +303,7 @@ export function buzzEntityFallbackTitle(link: ParsedEntityLink): string {
 }
 
 /**
- * Map a `buzz://pr|issue|repo|project` deep link onto a preview card. The
+ * Map a `mesh://pr|issue|repo|project` deep link onto a preview card. The
  * href is rebuilt through the canonical builders so equivalent links (case
  * or query order variants) dedupe to a single card.
  */
@@ -317,7 +317,7 @@ function parseBuzzEntityPreview(href: string): SupportedLinkPreview | null {
     return {
       kind: "buzz-pull-request",
       href: buildPullRequestLink(link),
-      provider: "Buzz",
+      provider: "Mesh",
       title,
       typeLabel: "PR",
     };
@@ -326,7 +326,7 @@ function parseBuzzEntityPreview(href: string): SupportedLinkPreview | null {
     return {
       kind: "buzz-issue",
       href: buildIssueLink(link),
-      provider: "Buzz",
+      provider: "Mesh",
       title,
       typeLabel: "issue",
     };
@@ -335,7 +335,7 @@ function parseBuzzEntityPreview(href: string): SupportedLinkPreview | null {
     return {
       kind: "buzz-project",
       href: buildProjectLink(link),
-      provider: "Buzz",
+      provider: "Mesh",
       title,
       typeLabel: "project",
     };
@@ -343,7 +343,7 @@ function parseBuzzEntityPreview(href: string): SupportedLinkPreview | null {
   return {
     kind: "buzz-repository",
     href: buildRepoLink(link),
-    provider: "Buzz",
+    provider: "Mesh",
     title,
     typeLabel: "repo",
   };
@@ -355,8 +355,8 @@ const BUZZ_GIT_PATH_RE =
 /**
  * Recognize a Buzz relay git URL (`{relay-origin}/git/<owner-pubkey>/<repo>`,
  * the clone URL shape agents paste when announcing work). The preview href
- * is normalized to the canonical `buzz://repo` deep link: the raw git
- * transport endpoint is not a browsable page, and the buzz:// href gives the
+ * is normalized to the canonical `mesh://repo` deep link: the raw git
+ * transport endpoint is not a browsable page, and the mesh:// href gives the
  * card the same in-app click navigation as explicit entity links (and
  * dedupes the two spellings of the same repository).
  *
@@ -385,7 +385,7 @@ function parseBuzzGitLink(
   return {
     kind: "buzz-repository",
     href: buildRepoLink({ owner, dtag: repo }),
-    provider: "Buzz",
+    provider: "Mesh",
     title: repo,
     typeLabel: "repo",
   };

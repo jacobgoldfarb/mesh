@@ -1,4 +1,4 @@
-/** Detect bare `buzz://pr|issue|repo?…` URLs in markdown text nodes. */
+/** Detect bare `mesh://pr|issue|repo?…` URLs in markdown text nodes. */
 import { createRemarkPrefixPlugin } from "../../../shared/lib/createRemarkPrefixPlugin.ts";
 
 const ENTITY_URL_PATTERN = /buzz:\/\/(?:pr|issue|repo)\?[^\s<>"')\]]+/g;
