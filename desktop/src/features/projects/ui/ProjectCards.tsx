@@ -282,7 +282,8 @@ function RepositoryUnavailableIndicator({
   if (!reason) return null;
   const status = {
     authentication: {
-      description: "Superhuman Mesh could not authenticate with this repository.",
+      description:
+        "Superhuman Mesh could not authenticate with this repository.",
       label: "Access failed",
     },
     missing: {

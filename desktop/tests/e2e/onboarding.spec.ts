@@ -783,7 +783,9 @@ test("fresh existing-identity path leads with private-key recovery", async ({
   const phoneDialog = page.getByTestId("phone-recovery-dialog");
   await expect(phoneDialog).toBeVisible();
   await expect(
-    phoneDialog.getByRole("heading", { name: "Use your Superhuman Mesh identity" }),
+    phoneDialog.getByRole("heading", {
+      name: "Use your Superhuman Mesh identity",
+    }),
   ).toBeVisible();
   await expect(phoneDialog.getByTestId("identity-recovery-qr")).toBeVisible();
   await expect(page.getByTestId("nostr-import-card")).toBeVisible();

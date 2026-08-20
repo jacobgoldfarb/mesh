@@ -21,7 +21,8 @@ import { writeTextToClipboard } from "@/shared/lib/clipboard";
 const COPY_SUCCESS_MESSAGE =
   "Signed response copied. Paste it into the Superhuman Mesh admin console.";
 const PREVIEW_COPY_SUCCESS_MESSAGE = "Preview response copied.";
-const COPY_FAILURE_MESSAGE = "Superhuman Mesh couldn't access the clipboard. Try again.";
+const COPY_FAILURE_MESSAGE =
+  "Superhuman Mesh couldn't access the clipboard. Try again.";
 const EXPIRED_LINK_MESSAGE =
   "This binding link has expired. Request a new one from the requesting app.";
 const VERIFICATION_CODE_LENGTH = 6;

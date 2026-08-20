@@ -162,8 +162,8 @@ export function SignOutSection() {
             <AlertDialogTitle>Sign out and wipe all data?</AlertDialogTitle>
             <AlertDialogDescription>
               This will delete your identity key, all agent settings, and cached
-              data from this device, then relaunch Superhuman Mesh into first-run setup.
-              This cannot be undone.
+              data from this device, then relaunch Superhuman Mesh into
+              first-run setup. This cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
 

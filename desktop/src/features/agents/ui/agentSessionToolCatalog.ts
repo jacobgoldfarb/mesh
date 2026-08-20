@@ -200,7 +200,9 @@ export function getBuzzToolInfo(title: string): BuzzToolInfo | null {
 
   return {
     icon: MessageSquare,
-    label: isRead ? "Reads from Superhuman Mesh." : "Writes to Superhuman Mesh.",
+    label: isRead
+      ? "Reads from Superhuman Mesh."
+      : "Writes to Superhuman Mesh.",
     tone: isWrite ? "write" : "read",
   };
 }

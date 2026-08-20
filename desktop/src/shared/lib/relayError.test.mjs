@@ -76,15 +76,14 @@ test("isRelayMembershipDeniedError: terminal session latch", () => {
 });
 
 test("isRelayMembershipDeniedError: blocked identity", () => {
-  assert.equal(
-    isRelayMembershipDeniedError("blocked: pubkey is banned"),
-    true,
-  );
+  assert.equal(isRelayMembershipDeniedError("blocked: pubkey is banned"), true);
 });
 
 test("isRelayMembershipDeniedError: unrelated error is false", () => {
   assert.equal(
-    isRelayMembershipDeniedError(new Error("Timed out while loading relay event.")),
+    isRelayMembershipDeniedError(
+      new Error("Timed out while loading relay event."),
+    ),
     false,
   );
 });

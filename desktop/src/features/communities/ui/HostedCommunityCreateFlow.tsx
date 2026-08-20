@@ -309,8 +309,8 @@ export function HostedCommunityCreateFlow({
     return (
       <div className="space-y-5">
         <p className="text-sm leading-6 text-muted-foreground">
-          Connect this device’s Superhuman Mesh identity to your Builderlab account. Your
-          private key stays on this device.
+          Connect this device’s Superhuman Mesh identity to your Builderlab
+          account. Your private key stays on this device.
         </p>
         {errorBox}
         <div className="flex justify-end gap-2 pt-1">
@@ -339,8 +339,8 @@ export function HostedCommunityCreateFlow({
     return (
       <div className="space-y-5">
         <p className="text-sm leading-6 text-muted-foreground">
-          This Builderlab account uses a different Superhuman Mesh identity. Switch it to
-          this device, or sign in with another account.
+          This Builderlab account uses a different Superhuman Mesh identity.
+          Switch it to this device, or sign in with another account.
         </p>
         <div className="rounded-xl bg-muted/40 px-4 py-3 font-mono text-xs text-muted-foreground">
           <p className="break-all">Account: {identity.npub ?? boundPubkey}</p>

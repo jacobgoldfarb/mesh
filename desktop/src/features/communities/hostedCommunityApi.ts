@@ -66,7 +66,8 @@ export function hostedCommunityErrorMessage(
   fallback: string,
 ) {
   const messages: Record<string, string> = {
-    missing_mapping: "Connect your Superhuman Mesh identity before creating a community.",
+    missing_mapping:
+      "Connect your Superhuman Mesh identity before creating a community.",
     invalid_name: "Use lowercase letters, numbers, and hyphens.",
     taken: "That Buzz address is already taken.",
     limit_reached: `You've reached the limit of ${HOSTED_COMMUNITY_LIMIT} hosted communities.`,

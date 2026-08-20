@@ -518,8 +518,8 @@ export function HostedCommunityOnboarding({
               <DialogDescription className="mt-2 text-sm leading-6 text-foreground">
                 Your Builderlab account
                 {auth.email ? ` (${auth.email})` : ""} is ready. Connect this
-                device’s Superhuman Mesh identity to finish setup. Your private key stays
-                on this device.
+                device’s Superhuman Mesh identity to finish setup. Your private
+                key stays on this device.
               </DialogDescription>
               {errorBox ? <div className="mt-5 w-full">{errorBox}</div> : null}
               <Button
@@ -539,8 +539,8 @@ export function HostedCommunityOnboarding({
                 This account uses a different Superhuman Mesh identity
               </DialogTitle>
               <DialogDescription className="mt-2 text-sm leading-6 text-foreground">
-                This account is connected to another Superhuman Mesh identity. Reconnect
-                this device, or sign out to use a different email.
+                This account is connected to another Superhuman Mesh identity.
+                Reconnect this device, or sign out to use a different email.
               </DialogDescription>
               <p className="mt-4 w-full break-all rounded-xl bg-[rgb(var(--buzz-hosted-community-identity-bg)/0.5)] px-4 py-3 text-left font-mono text-xs text-foreground">
                 Account: {identity.npub ?? boundPubkey}
