@@ -16,6 +16,7 @@ type AppShellKeyboardShortcutsOptions = {
   onNewMessage: () => unknown;
   onSearchCurrentChannel: () => void;
   onSearchEverything: () => void;
+  onToggleFocus: () => void;
 };
 
 export function useAppShellKeyboardShortcuts({
@@ -28,6 +29,7 @@ export function useAppShellKeyboardShortcuts({
   onNewMessage,
   onSearchCurrentChannel,
   onSearchEverything,
+  onToggleFocus,
 }: AppShellKeyboardShortcutsOptions) {
   React.useLayoutEffect(() => {
     if (disabled) return;
@@ -64,6 +66,12 @@ export function useAppShellKeyboardShortcuts({
       }
 
       const key = event.key.toLowerCase();
+      if (key === "f" && event.shiftKey) {
+        event.preventDefault();
+        onToggleFocus();
+        return;
+      }
+
       if (key === "f" && !event.shiftKey && canSearchCurrentChannel) {
         event.preventDefault();
         onSearchCurrentChannel();
@@ -120,5 +128,6 @@ export function useAppShellKeyboardShortcuts({
     onNewMessage,
     onSearchCurrentChannel,
     onSearchEverything,
+    onToggleFocus,
   ]);
 }

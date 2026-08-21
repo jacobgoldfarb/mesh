@@ -15,6 +15,11 @@ import {
 import { useFibreSeenState } from "@/features/home/ui/fibre/useFibreSeenState";
 import { useFibreSort } from "@/features/home/ui/fibre/useFibreSort";
 import { HomeLoadingState } from "@/features/home/ui/HomeLoadingState";
+import {
+  fibrePassesFocus,
+  resolveFocusFilter,
+} from "@/features/focus/passesFocus";
+import { useFocusMode } from "@/features/focus/useFocusMode";
 import { useUsersBatchQuery } from "@/features/profile/hooks";
 import type { Fibre } from "@/features/triage/api";
 import {
@@ -61,17 +66,34 @@ export function FibreInboxView({
   const { setSort, sort } = useFibreSort(listTab);
   const [selectedId, setSelectedId] = React.useState<string | null>(null);
 
-  const openFibres = React.useMemo(
-    () => sortFibres(fibresQuery.data?.fibres ?? [], sort, "activity"),
-    [fibresQuery.data?.fibres, sort],
+  // Focus (Zen) mode narrows the inbox to fibres involving important people,
+  // important channels, or DMs (when dmPolicy is "all"). Counts reflect the
+  // filtered view so the tab badges and inbox-zero wallpaper stay honest.
+  const { config: focusConfig } = useFocusMode(currentPubkey);
+  const focusFilter = React.useMemo(
+    () => resolveFocusFilter(focusConfig),
+    [focusConfig],
   );
-  const doneFibres = React.useMemo(
-    () => sortFibres(fibresQuery.data?.done ?? [], sort, "updated"),
-    [fibresQuery.data?.done, sort],
-  );
+
+  const openFibres = React.useMemo(() => {
+    const sorted = sortFibres(fibresQuery.data?.fibres ?? [], sort, "activity");
+    return focusFilter.enabled
+      ? sorted.filter((fibre) => fibrePassesFocus(fibre, focusFilter))
+      : sorted;
+  }, [fibresQuery.data?.fibres, focusFilter, sort]);
+  const doneFibres = React.useMemo(() => {
+    const sorted = sortFibres(fibresQuery.data?.done ?? [], sort, "updated");
+    return focusFilter.enabled
+      ? sorted.filter((fibre) => fibrePassesFocus(fibre, focusFilter))
+      : sorted;
+  }, [fibresQuery.data?.done, focusFilter, sort]);
   const fibres = listTab === "done" ? doneFibres : openFibres;
-  const openCount = fibresQuery.data?.openCount ?? openFibres.length;
-  const doneCount = fibresQuery.data?.doneCount ?? doneFibres.length;
+  const openCount = focusFilter.enabled
+    ? openFibres.length
+    : (fibresQuery.data?.openCount ?? openFibres.length);
+  const doneCount = focusFilter.enabled
+    ? doneFibres.length
+    : (fibresQuery.data?.doneCount ?? doneFibres.length);
   const profilePubkeys = React.useMemo(() => {
     const pubkeys = collectFibrePubkeys([...openFibres, ...doneFibres]);
     if (currentPubkey) pubkeys.push(currentPubkey);

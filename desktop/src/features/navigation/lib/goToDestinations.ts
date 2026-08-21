@@ -1,8 +1,8 @@
-import { Bot, Inbox } from "lucide-react";
+import { Bot, Inbox, Moon } from "lucide-react";
 
 import type { GoToAcceleratorItem } from "@/features/navigation/lib/goToAccelerators";
 
-export type GoToDestinationId = "inbox" | "agents";
+export type GoToDestinationId = "inbox" | "agents" | "focus";
 
 /**
  * A top-level app area reachable from the ⌘G "Go to" palette.
@@ -32,5 +32,12 @@ export const GO_TO_DESTINATIONS: readonly GoToDestination[] = [
     icon: Bot,
     mnemonic: "A",
     keywords: ["bots", "directory", "job board"],
+  },
+  {
+    id: "focus",
+    label: "Toggle Focus mode",
+    icon: Moon,
+    mnemonic: "Z",
+    keywords: ["zen", "focus", "do not disturb", "dnd", "quiet", "deep work"],
   },
 ];

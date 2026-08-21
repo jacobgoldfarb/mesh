@@ -2,6 +2,7 @@ import * as React from "react";
 import {
   ChevronLeft,
   ChevronRight,
+  Moon,
   PanelLeftClose,
   PanelLeftOpen,
 } from "lucide-react";
@@ -16,8 +17,10 @@ import { useOptionalSidebar } from "@/shared/ui/sidebar";
 type AppTopChromeProps = {
   canGoBack: boolean;
   canGoForward: boolean;
+  focusActive: boolean;
   onGoBack: () => void;
   onGoForward: () => void;
+  onToggleFocus: () => void;
   hasCommunityRail?: boolean;
 };
 
@@ -59,8 +62,10 @@ function TopChromeSidebarTrigger() {
 export function AppTopChrome({
   canGoBack,
   canGoForward,
+  focusActive,
   onGoBack,
   onGoForward,
+  onToggleFocus,
   hasCommunityRail = false,
 }: AppTopChromeProps) {
   const topChromeRef = React.useRef<HTMLDivElement>(null);
@@ -129,6 +134,36 @@ export function AppTopChrome({
           variant="ghost"
         >
           <ChevronRight />
+        </Button>
+      </div>
+      <div
+        className={cn("ml-auto flex items-center gap-1", navRowAlignmentClass)}
+      >
+        {focusActive ? (
+          <span
+            className="rounded-full bg-primary/15 px-2 py-0.5 text-2xs font-medium uppercase tracking-wide text-primary"
+            data-testid="focus-mode-indicator"
+          >
+            Focus
+          </span>
+        ) : null}
+        <Button
+          aria-label={focusActive ? "Exit Focus mode" : "Enter Focus mode"}
+          aria-pressed={focusActive}
+          className={cn(
+            TOP_CHROME_ICON_BUTTON_CLASS,
+            focusActive &&
+              "bg-primary/15 text-primary hover:bg-primary/20 hover:text-primary",
+          )}
+          data-testid="toggle-focus-mode"
+          onClick={onToggleFocus}
+          size="icon"
+          title={focusActive ? "Exit Focus mode (⇧⌘F)" : "Focus mode (⇧⌘F)"}
+          type="button"
+          variant="ghost"
+        >
+          <Moon />
+          <span className="sr-only">Toggle Focus mode</span>
         </Button>
       </div>
     </div>

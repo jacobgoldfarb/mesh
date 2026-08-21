@@ -4,7 +4,15 @@ import {
   shouldBounceForChannelNotification,
   toSearchHit,
 } from "@/app/AppShell.helpers";
-import { getThreadReference } from "@/features/messages/lib/threading";
+import {
+  eventPassesFocus,
+  resolveFocusFilter,
+} from "@/features/focus/passesFocus";
+import { useFocusMode } from "@/features/focus/useFocusMode";
+import {
+  getThreadReference,
+  isBroadcastReply,
+} from "@/features/messages/lib/threading";
 import { useCommunityJoinAlerts } from "@/features/community-members/useCommunityJoinAlerts";
 import { hasMentionForEvent } from "@/features/notifications/lib/shouldNotify";
 import type { NotificationSettings } from "@/features/notifications/hooks";
@@ -46,11 +54,19 @@ export function useAppShellDesktopNotifications({
   pubkey?: string;
   silentChannelIds?: ReadonlySet<string>;
 }) {
+  const normalizedPubkey = pubkey?.trim().toLowerCase() ?? "";
+  // Focus (Zen) mode gate — suppresses non-allowlisted alerts when active.
+  const { config: focusConfig } = useFocusMode(pubkey);
+  const focusFilter = React.useMemo(
+    () => resolveFocusFilter(focusConfig),
+    [focusConfig],
+  );
   // Roster alerts are owner/admin-only and self-gating; mounted here because
   // it shares this hook's "desktop notifications are on" precondition and
-  // AppShell sits at the file-size ratchet ceiling.
+  // AppShell sits at the file-size ratchet ceiling. Focus mode silences them.
   useCommunityJoinAlerts({
-    enabled: enabled && notificationSettings.desktopEnabled,
+    enabled:
+      enabled && notificationSettings.desktopEnabled && !focusFilter.enabled,
   });
 
   const handleChannelNotification = React.useEffectEvent(
@@ -58,6 +74,13 @@ export function useAppShellDesktopNotifications({
       if (!enabled) return;
       if (!shouldBounceForChannelNotification(event.tags)) return;
       if (!notificationSettings.desktopEnabled) return;
+      if (
+        !eventPassesFocus(event, normalizedPubkey, focusFilter, {
+          channelId: _channelId,
+        })
+      ) {
+        return;
+      }
       void requestDockBounce();
     },
   );
@@ -68,6 +91,14 @@ export function useAppShellDesktopNotifications({
       if (
         !notificationSettings.desktopEnabled ||
         !notificationSettings.slotAlertsEnabled.dm
+      ) {
+        return;
+      }
+      if (
+        !eventPassesFocus(event, normalizedPubkey, focusFilter, {
+          channelId: channel.id,
+          isDm: true,
+        })
       ) {
         return;
       }
@@ -111,8 +142,21 @@ export function useAppShellDesktopNotifications({
 
       // Replies that @-mention the user are owned by the home-feed mention
       // path — skip them here so they don't notify (and sound) twice.
-      const normalizedPubkey = pubkey?.trim().toLowerCase() ?? "";
       if (hasMentionForEvent(event, normalizedPubkey)) {
+        return;
+      }
+
+      // Focus mode: reaching here already means the user is involved in the
+      // thread (participated / followed / authored). Break through only for
+      // important channels/authors, broadcasts, or when followed-thread
+      // breakthrough is on.
+      if (
+        focusFilter.enabled &&
+        !isBroadcastReply(event.tags) &&
+        !focusFilter.importantPubkeys.has(event.pubkey.toLowerCase()) &&
+        !focusFilter.importantChannelIds.has(channelId) &&
+        !focusFilter.followedThreadsBreakThrough
+      ) {
         return;
       }
 

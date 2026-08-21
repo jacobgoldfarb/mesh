@@ -13,6 +13,7 @@ import {
   MessagesSquare,
   MonitorCog,
   Moon,
+  MoonStar,
   ShieldAlert,
   Smartphone,
   Smile,
@@ -62,6 +63,7 @@ import {
 } from "./AppearanceSettingsControls";
 import { ChannelTemplatesSettingsCard } from "./ChannelTemplatesSettingsCard";
 import { ExperimentalFeaturesCard } from "./ExperimentalFeaturesCard";
+import { FocusSettingsCard } from "@/features/focus/ui/FocusSettingsCard";
 import { KeyboardShortcutsCard } from "./KeyboardShortcutsCard";
 import { MeshComputeSettingsCard } from "@/features/mesh-compute/ui/MeshComputeSettingsCard";
 import { MobilePairingCard } from "./MobilePairingCard";
@@ -82,6 +84,7 @@ import { VoiceSettingsCard } from "./VoiceSettingsCard";
 export type SettingsSection =
   | "profile"
   | "notifications"
+  | "focus"
   | "voice"
   | "experimental"
   | "agents"
@@ -102,6 +105,7 @@ export const DEFAULT_SETTINGS_SECTION: SettingsSection = "profile";
 const SETTINGS_SECTION_VALUES: readonly SettingsSection[] = [
   "profile",
   "notifications",
+  "focus",
   "voice",
   "experimental",
   "agents",
@@ -163,6 +167,11 @@ export const settingsSections: SettingsSectionDescriptor[] = [
     value: "notifications",
     label: "Notifications",
     icon: BellRing,
+  },
+  {
+    value: "focus",
+    label: "Focus",
+    icon: MoonStar,
   },
   {
     value: "voice",
@@ -847,6 +856,8 @@ export function renderSettingsSection(
           onSetSoundForSlot={props.onSetSoundForSlot}
         />
       );
+    case "focus":
+      return <FocusSettingsCard currentPubkey={props.currentPubkey} />;
     case "voice":
       return <VoiceSettingsCard />;
     case "experimental":

@@ -58,6 +58,7 @@ const settingsNavGroups: Array<{
       "profile",
       "appearance",
       "notifications",
+      "focus",
       "voice",
       "shortcuts",
       "custom-emoji",
