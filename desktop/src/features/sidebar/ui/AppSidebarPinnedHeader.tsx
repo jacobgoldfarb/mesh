@@ -38,6 +38,7 @@ type AppSidebarPinnedHeaderProps = {
 };
 
 type AppSidebarPrimaryMenuProps = {
+  focusActive?: boolean;
   homeBadgeCount: number;
   onSelectAgents: () => void;
   onSelectHome: () => void;
@@ -87,6 +88,7 @@ export function AppSidebarPinnedHeader({
 }
 
 export function AppSidebarPrimaryMenu({
+  focusActive = false,
   homeBadgeCount,
   onSelectAgents,
   onSelectHome,
@@ -122,34 +124,38 @@ export function AppSidebarPrimaryMenu({
             </SidebarMenuBadge>
           ) : null}
         </SidebarMenuItem>
-        <FeatureGate feature="pulse">
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              data-testid="open-pulse-view"
-              isActive={selectedView === "pulse"}
-              onClick={onSelectPulse}
-              tooltip="Pulse"
-              type="button"
-            >
-              <Activity className="h-4 w-4" />
-              <SidebarMenuLabel>Pulse</SidebarMenuLabel>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </FeatureGate>
-        <FeatureGate feature="projects">
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              data-testid="open-projects-view"
-              isActive={selectedView === "projects"}
-              onClick={onSelectProjects}
-              tooltip="Projects"
-              type="button"
-            >
-              <FolderGit2 className="h-4 w-4" />
-              <SidebarMenuLabel>Projects</SidebarMenuLabel>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </FeatureGate>
+        {!focusActive ? (
+          <FeatureGate feature="pulse">
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                data-testid="open-pulse-view"
+                isActive={selectedView === "pulse"}
+                onClick={onSelectPulse}
+                tooltip="Pulse"
+                type="button"
+              >
+                <Activity className="h-4 w-4" />
+                <SidebarMenuLabel>Pulse</SidebarMenuLabel>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </FeatureGate>
+        ) : null}
+        {!focusActive ? (
+          <FeatureGate feature="projects">
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                data-testid="open-projects-view"
+                isActive={selectedView === "projects"}
+                onClick={onSelectProjects}
+                tooltip="Projects"
+                type="button"
+              >
+                <FolderGit2 className="h-4 w-4" />
+                <SidebarMenuLabel>Projects</SidebarMenuLabel>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </FeatureGate>
+        ) : null}
         <SidebarMenuItem>
           <SidebarMenuButton
             className="data-[active=true]:font-normal"
@@ -163,20 +169,22 @@ export function AppSidebarPrimaryMenu({
             <SidebarMenuLabel>Agents</SidebarMenuLabel>
           </SidebarMenuButton>
         </SidebarMenuItem>
-        <FeatureGate feature="workflows">
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              data-testid="open-workflows-view"
-              isActive={selectedView === "workflows"}
-              onClick={onSelectWorkflows}
-              tooltip="Workflows"
-              type="button"
-            >
-              <Zap className="h-4 w-4" />
-              <SidebarMenuLabel>Workflows</SidebarMenuLabel>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </FeatureGate>
+        {!focusActive ? (
+          <FeatureGate feature="workflows">
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                data-testid="open-workflows-view"
+                isActive={selectedView === "workflows"}
+                onClick={onSelectWorkflows}
+                tooltip="Workflows"
+                type="button"
+              >
+                <Zap className="h-4 w-4" />
+                <SidebarMenuLabel>Workflows</SidebarMenuLabel>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </FeatureGate>
+        ) : null}
       </SidebarMenu>
     </SidebarHeader>
   );

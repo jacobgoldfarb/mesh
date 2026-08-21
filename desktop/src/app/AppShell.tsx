@@ -79,6 +79,7 @@ import { requestFocusedThreadClose } from "@/features/channels/focusedThreadClos
 import { CommunityRail } from "@/features/sidebar/ui/CommunityRail";
 import { useChannelMutes } from "@/features/sidebar/lib/useChannelMutes";
 import { useChannelStars } from "@/features/sidebar/lib/useChannelStars";
+import { useFocusModeView } from "@/features/focus/useFocusModeView";
 import { useCommunities } from "@/features/communities/useCommunities";
 import {
   consumePendingCommunityRestore,
@@ -397,6 +398,12 @@ export function AppShell() {
     },
   );
 
+  const focus = useFocusModeView(identityQuery.data?.pubkey, {
+    channels: sidebarChannels,
+    highPriorityUnreadChannelIds,
+    unreadChannelIds,
+    selectedChannelId,
+  });
   const {
     getThreadReadAt,
     markThreadRead,
@@ -646,6 +653,7 @@ export function AppShell() {
     homeBadgeCountExcludingHighPriority,
     unreadChannelIds,
     unreadChannelNotificationCount,
+    focusBadge: focus.badge,
   });
   // Dispatch `buzz://` deep links only from the main window; the companion is dedicated to its active Huddle route.
   useAppDeepLinks(!isHuddleRoom);
@@ -664,6 +672,7 @@ export function AppShell() {
     onNewMessage: goNewMessage,
     onSearchCurrentChannel: handleOpenChannelSearch,
     onSearchEverything: handleOpenSearch,
+    onToggleFocus: focus.toggle,
   });
   const handleGoTo = React.useCallback(
     (id: GoToDestinationId) => {
@@ -674,8 +683,9 @@ export function AppShell() {
       if (id === "agents") {
         void goAgents();
       }
+      if (id === "focus") focus.toggle();
     },
-    [goAgents, goHome],
+    [focus.toggle, goAgents, goHome],
   );
   const goToPalette = useGoToPalette({
     disabled: isHuddleRoom,
@@ -778,9 +788,11 @@ export function AppShell() {
                   <AppTopChrome
                     canGoBack={canGoBack}
                     canGoForward={canGoForward}
+                    focusActive={focus.enabled}
                     hasCommunityRail={hasCommunityRail}
                     onGoBack={goBack}
                     onGoForward={goForward}
+                    onToggleFocus={focus.toggle}
                   />
                 ) : null}
                 {settingsOpen ? (
@@ -919,6 +931,8 @@ export function AppShell() {
                         starredChannelIds={starredChannelIds}
                         onStarChannel={starChannel}
                         onUnstarChannel={unstarChannel}
+                        focusVisibleChannelIds={focus.visibleChannelIds}
+                        onExitFocus={() => focus.setEnabled(false)}
                       />
                     ) : null}
                     <AppShellChannelSurface

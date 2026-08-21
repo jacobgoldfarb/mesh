@@ -10,6 +10,12 @@ type AppShellLifecycleEffectsOptions = {
   homeBadgeCountExcludingHighPriority: number;
   unreadChannelIds: ReadonlySet<string>;
   unreadChannelNotificationCount: number;
+  /**
+   * Focus (Zen) mode dock-badge override. When set the numeric badge is
+   * suppressed: "dot" shows a plain dot (allowlisted unread present), "none"
+   * clears it. `null`/undefined = Focus off, use the normal count logic.
+   */
+  focusBadge?: "dot" | "none" | null;
 };
 
 export function useAppShellLifecycleEffects({
@@ -17,6 +23,7 @@ export function useAppShellLifecycleEffects({
   homeBadgeCountExcludingHighPriority,
   unreadChannelIds,
   unreadChannelNotificationCount,
+  focusBadge,
 }: AppShellLifecycleEffectsOptions) {
   // Event-driven reconnect: network online / focus / visibility short-circuit
   // the backoff timer when the relay session is degraded (CMD+R gap G1).
@@ -77,6 +84,15 @@ export function useAppShellLifecycleEffects({
       return;
     }
 
+    // Focus mode suppresses the noisy numeric badge: show a dot only when an
+    // allowlisted-visible channel is unread, otherwise clear it entirely.
+    if (focusBadge) {
+      void setDesktopAppBadge(
+        focusBadge === "dot" ? { kind: "dot" } : { kind: "none" },
+      );
+      return;
+    }
+
     const count =
       unreadChannelNotificationCount + homeBadgeCountExcludingHighPriority;
     void setDesktopAppBadge(
@@ -86,6 +102,7 @@ export function useAppShellLifecycleEffects({
     );
   }, [
     desktopBadgeEnabled,
+    focusBadge,
     homeBadgeCountExcludingHighPriority,
     unreadChannelIds,
     unreadChannelNotificationCount,

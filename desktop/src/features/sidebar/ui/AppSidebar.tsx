@@ -2,6 +2,8 @@
 import * as React from "react";
 import { FeatureGate } from "@/shared/features";
 import { SidebarDndContext } from "@/features/sidebar/ui/SidebarDnd";
+import { SidebarFocusBanner } from "@/features/sidebar/ui/SidebarFocusBanner";
+import { useSidebarWheelBoundary } from "@/features/sidebar/lib/useSidebarWheelBoundary";
 
 import type { LeaveCommunityResult } from "@/features/communities/leaveCommunity";
 import type { Community } from "@/features/communities/types";
@@ -164,6 +166,12 @@ type AppSidebarProps = {
   starredChannelIds?: ReadonlySet<string>;
   onStarChannel?: (channelId: string) => void;
   onUnstarChannel?: (channelId: string) => void;
+  /**
+   * Channel ids that remain visible while Focus (Zen) mode is active. When
+   * defined, Focus mode is active and the sidebar trims to this set.
+   */
+  focusVisibleChannelIds?: ReadonlySet<string>;
+  onExitFocus?: () => void;
 };
 
 export function AppSidebar({
@@ -230,7 +238,10 @@ export function AppSidebar({
   starredChannelIds,
   onStarChannel,
   onUnstarChannel,
+  focusVisibleChannelIds,
+  onExitFocus,
 }: AppSidebarProps) {
+  const focusActive = focusVisibleChannelIds !== undefined;
   const activeWorkingByChannelId = useActiveWorkingChannelsById();
   const { status: updateStatus } = useUpdaterContext();
   const canShowSidebarUpdateCard = shouldShowSidebarUpdateCard(updateStatus);
@@ -243,46 +254,9 @@ export function AppSidebar({
   const [dmActionsMenuOpen, setDmActionsMenuOpen] = React.useState(false);
   const scrollRef = React.useRef<HTMLDivElement>(null);
   useSidebarScrollLock(scrollRef);
+  useSidebarWheelBoundary(scrollRef);
   // biome-ignore format: keep compact to stay within file size limit
   const { scrollToNextAbove, scrollToNextBelow, unreadAboveCount, unreadBelowCount, unreadAboveLabel, unreadBelowLabel } = useSidebarActivityOverflow({ activeWorkingByChannelId, previewActivityChannelIds, scrollRef, unreadChannelIds });
-
-  React.useEffect(() => {
-    const scrollElement = scrollRef.current;
-    if (!scrollElement) return;
-
-    const handleWheel = (event: WheelEvent) => {
-      if (event.deltaY === 0) return;
-
-      const maxScrollTop =
-        scrollElement.scrollHeight - scrollElement.clientHeight;
-      if (maxScrollTop <= 0) {
-        event.preventDefault();
-        event.stopPropagation();
-        return;
-      }
-
-      const atTop = scrollElement.scrollTop <= 0;
-      const atBottom = scrollElement.scrollTop >= maxScrollTop - 1;
-      const scrollingPastTop = event.deltaY < 0 && atTop;
-      const scrollingPastBottom = event.deltaY > 0 && atBottom;
-
-      if (scrollingPastTop || scrollingPastBottom) {
-        event.preventDefault();
-        event.stopPropagation();
-        scrollElement.scrollTop = scrollingPastTop ? 0 : maxScrollTop;
-      }
-    };
-
-    scrollElement.addEventListener("wheel", handleWheel, {
-      capture: true,
-      passive: false,
-    });
-    return () => {
-      scrollElement.removeEventListener("wheel", handleWheel, {
-        capture: true,
-      });
-    };
-  }, []);
 
   const [createDialogKind, setCreateDialogKind] =
     React.useState<CreateChannelKind | null>(null);
@@ -379,9 +353,22 @@ export function AppSidebar({
       if (channel.id === selectedChannelId) onSelectHome();
     });
 
+  // Focus (Zen) mode trims every sidebar group to the allowlisted-visible set
+  // computed in AppShell. Search, DnD, and huddle controls keep the full
+  // `channels` list; only the rendered groups collapse.
+  const visibleChannels = React.useMemo(() => {
+    if (!focusActive || !focusVisibleChannelIds) {
+      return channels;
+    }
+    return channels.filter((channel) => focusVisibleChannelIds.has(channel.id));
+  }, [channels, focusActive, focusVisibleChannelIds]);
+  const focusHiddenCount = focusActive
+    ? channels.length - visibleChannels.length
+    : 0;
+
   const streamChannels = React.useMemo(
-    () => channels.filter((channel) => channel.channelType === "stream"),
-    [channels],
+    () => visibleChannels.filter((channel) => channel.channelType === "stream"),
+    [visibleChannels],
   );
 
   const sectionBuckets = React.useMemo(() => {
@@ -453,14 +440,14 @@ export function AppSidebar({
   const forumChannels = React.useMemo(
     () =>
       sortChannelsForSidebar(
-        channels.filter((channel) => channel.channelType === "forum"),
+        visibleChannels.filter((channel) => channel.channelType === "forum"),
         sortModeFor("forums"),
       ),
-    [channels, sortModeFor],
+    [visibleChannels, sortModeFor],
   );
   const directMessages = React.useMemo(
-    () => channels.filter((channel) => channel.channelType === "dm"),
-    [channels],
+    () => visibleChannels.filter((channel) => channel.channelType === "dm"),
+    [visibleChannels],
   );
   const isSelectedDirectMessage =
     selectedView === "channel" &&
@@ -600,7 +587,15 @@ export function AppSidebar({
               data-sidebar-background
               data-testid="sidebar-scroll-content"
             >
+              {focusActive ? (
+                <SidebarFocusBanner
+                  hiddenCount={focusHiddenCount}
+                  onExit={onExitFocus}
+                />
+              ) : null}
+
               <AppSidebarPrimaryMenu
+                focusActive={focusActive}
                 homeBadgeCount={homeBadgeCount}
                 onSelectAgents={onSelectAgents}
                 onSelectHome={onSelectHome}

@@ -5,6 +5,11 @@ import {
   resolveUserLabel,
   type UserProfileLookup,
 } from "@/features/profile/lib/identity";
+import {
+  feedItemPassesFocus,
+  resolveFocusFilter,
+} from "@/features/focus/passesFocus";
+import { useFocusMode } from "@/features/focus/useFocusMode";
 import { getThreadReference } from "@/features/messages/lib/threading";
 import type { FeedItem, HomeFeedResponse } from "@/shared/api/types";
 import {
@@ -81,6 +86,11 @@ export function useFeedDesktopNotifications(
   silentChannelIds?: ReadonlySet<string>,
 ) {
   const normalizedPubkey = pubkey?.trim().toLowerCase() ?? "";
+  const { config: focusConfig } = useFocusMode(pubkey);
+  const focusFilter = React.useMemo(
+    () => resolveFocusFilter(focusConfig),
+    [focusConfig],
+  );
   const seenItemIdsRef = React.useRef<Set<string>>(
     new Set(readStoredSeenFeedIds(normalizedPubkey)),
   );
@@ -180,6 +190,7 @@ export function useFeedDesktopNotifications(
               !mutedChannelIds?.has(item.channelId) ||
               item.category === "mention",
           )
+          .filter((item) => feedItemPassesFocus(item, focusFilter))
       : [];
 
     for (const item of currentFeedItems) {
@@ -223,6 +234,7 @@ export function useFeedDesktopNotifications(
     enabled,
     feed,
     channels,
+    focusFilter,
     mutedChannelIds,
     normalizedPubkey,
     profiles,

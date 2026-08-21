@@ -17,6 +17,11 @@ import {
 import { useFibreSeenState } from "@/features/home/ui/fibre/useFibreSeenState";
 import { useFibreSort } from "@/features/home/ui/fibre/useFibreSort";
 import { HomeLoadingState } from "@/features/home/ui/HomeLoadingState";
+import {
+  fibrePassesFocus,
+  resolveFocusFilter,
+} from "@/features/focus/passesFocus";
+import { useFocusMode } from "@/features/focus/useFocusMode";
 import { useUsersBatchQuery } from "@/features/profile/hooks";
 import type { Fibre } from "@/features/triage/api";
 import { fibresInLane } from "@/features/triage/fibreStatus";
@@ -72,20 +77,38 @@ export function FibreInboxView({
     title: string;
   } | null>(null);
 
-  const openFibres = React.useMemo(
-    () => sortFibres(fibresQuery.data?.fibres ?? [], sort, "activity"),
-    [fibresQuery.data?.fibres, sort],
+  // Focus (Zen) mode narrows the inbox to fibres involving important people,
+  // important channels, or DMs (when dmPolicy is "all"). Counts reflect the
+  // filtered view so the tab badges and inbox-zero wallpaper stay honest.
+  const { config: focusConfig } = useFocusMode(currentPubkey);
+  const focusFilter = React.useMemo(
+    () => resolveFocusFilter(focusConfig),
+    [focusConfig],
   );
-  const doneFibres = React.useMemo(
-    () => sortFibres(fibresQuery.data?.done ?? [], sort, "updated"),
-    [fibresQuery.data?.done, sort],
-  );
+  const openFibres = React.useMemo(() => {
+    const sorted = sortFibres(fibresQuery.data?.fibres ?? [], sort, "activity");
+    return focusFilter.enabled
+      ? sorted.filter((fibre) => fibrePassesFocus(fibre, focusFilter))
+      : sorted;
+  }, [fibresQuery.data?.fibres, focusFilter, sort]);
+  const doneFibres = React.useMemo(() => {
+    const sorted = sortFibres(fibresQuery.data?.done ?? [], sort, "updated");
+    return focusFilter.enabled
+      ? sorted.filter((fibre) => fibrePassesFocus(fibre, focusFilter))
+      : sorted;
+  }, [fibresQuery.data?.done, focusFilter, sort]);
   const fibres = React.useMemo(
     () => (listTab === "done" ? doneFibres : fibresInLane(openFibres, listTab)),
     [doneFibres, listTab, openFibres],
   );
-  const openCount = fibresQuery.data?.openCount ?? openFibres.length;
-  const doneCount = fibresQuery.data?.doneCount ?? doneFibres.length;
+  // When focused, counts reflect the filtered set so tab badges and the
+  // inbox-zero wallpaper stay honest; otherwise trust the server totals.
+  const openCount = focusFilter.enabled
+    ? openFibres.length
+    : (fibresQuery.data?.openCount ?? openFibres.length);
+  const doneCount = focusFilter.enabled
+    ? doneFibres.length
+    : (fibresQuery.data?.doneCount ?? doneFibres.length);
   const tabCounts = React.useMemo(() => {
     const counts = Object.fromEntries(
       FIBRE_LIST_TABS.map((tab) => [tab, 0]),
